@@ -105,13 +105,13 @@ class board(object):
 
     def solved(self):
         if n % 2 == 0:
-            exit.y = n / 2
+            exitY = n / 2
         else:
-            exit.y = (n + 1) / 2
+            exitY = (n + 1) / 2
 
-        exit.x = n - 2
+        exitX = n - 2
 
-        if (target.x, target.y) == (exit.x, exit.y):
+        if (target.x, target.y) == (exitX, exitY):
             return true
         else:
             return false
