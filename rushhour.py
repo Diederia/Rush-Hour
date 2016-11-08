@@ -25,7 +25,7 @@ class Vehicle(object):
         else:
             raise ValueError('Invalid value(s) of coordinate(s)')
 
-        if orientation != 'h' or 'v':
+        if orientation == 'h' or 'v':
             self.orientation = orientation
         else:
             raise ValueError('Invalid value for orientation')
@@ -34,10 +34,6 @@ class Vehicle(object):
             self.length = length
         else:
             raise ValueError('Invalid value for length')
-
-    def __repr__(self):
-        return "Vehicle({0}, {1}, {2}, {3}, {4})".format(self.name, self.x,
-        self.y, self.orientation, self.length)
 
 class board(object):
     """
@@ -54,14 +50,14 @@ class board(object):
         self.board = np.zeros((width, height))
         self.vehicles = vehicles
 
-    def load_file(file):
+    def load_file(self, file):
         vehicles = []
         f = open(file)
         csv_file = csv.reader(f)
 
         for row in csv_file:
             name, x, y, orientation, length = row
-            vehicles.append(Vehicle(name, int(x), int(y), orientation, int(length)))
+            self.vehicles.append(Vehicle(name, int(x), int(y), orientation, int(length)))
         f.close()
 
     def getVehicles(self):
@@ -81,40 +77,31 @@ class board(object):
 
         if Vehicle.orientation = 'h':
             if direction = 'left':
-                # check if coordiantes are within the board
-                if self.x - steps >= 0:
-                    # check if die niet tegene en andere auto aanbotst, begrijpen we nog niet helemaal.
-                    # HOE KRIJGEN WE DE WAARDE UIT DE PLAATS OP HET BOARD EN CHECKEN OF HET GELIJK IS AAN NUL
-                    if self.x.......:
-
-                    else:
-                        raise ValueError ('move is not valid')
+                # check if coordiantes are within the board and if it doesn't bump into another car
+                if Vehicle.x - steps >= 0 and board[Vehicle.y, Vehicle.x - steps] == 0:
+                    # update the vehicle
                 else:
                     raise ValueError('move is not valid')
             elif direction = 'right':
-                if self.x + steps <= n:
-                    if self.x.......:
-
+                if Vehicle.x + steps <= n and board[Vehicle.y, Vehicle.x + steps] == 0:
+                    # update the vehicle
                     else:
                         raise ValueError ('move is not valid')
             else:
-                raise ValueError('please give a left or right direction')
+                raise ValueError('please give a left or right as direction')
         else:
             if direction = 'up':
-                if self.y - steps >= 0:
-                    #   ZELFDE PROBLEEM ALS BIJ horizontal
-                    if self.y ......:
-
-                    else:
-                        raise ValueError ('move is not valid')
-                elif direction = 'down':
-                    if self.y + steps <= n:
-                        if self.y.........:
-
-                        else:
-                            raise ValueError ('move is not valid')
+                if Vehicle.y - steps >= 0 and board[Vehicle.y - steps, Vehicle.x] == 0:
+                    #   update the vehicle
                 else:
-                    raise ValueError('please give a up or down direction')
+                    raise ValueError ('move is not valid')
+            elif direction = 'down':
+                if Vehicle.y + steps <= n and board[Vehicle.y + steps, Vehicle.x] == 0:
+                    #update the vehicle
+                else:
+                    raise ValueError ('move is not valid')
+            else:
+                raise ValueError('please give a up or down direction')
 
     def solved(self):
         if n % 2 == 0:
@@ -128,7 +115,6 @@ class board(object):
             return true
         else:
             return false
-
 
 #
 # class truck(Vehicle):
