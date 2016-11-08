@@ -4,7 +4,7 @@
 import numpy as np
 import csv
 
-class vehicle(object):
+class Vehicle(object):
     """A configuration of a single vehicle."""
 
     def __init__(self, name, x, y, orientation, length):
@@ -24,7 +24,7 @@ class vehicle(object):
         self.length = length
 
     def __repr__(self):
-        return "vehicle({0}, {1}, {2}, {3}, {4})".format(self.name, self.x,
+        return "Vehicle({0}, {1}, {2}, {3}, {4})".format(self.name, self.x,
         self.y, self.orientation, self.length)
 
 class board(object):
@@ -44,25 +44,25 @@ class board(object):
 
     def load_file(file):
         vehicles = []
-        f = open('board1.csv')
+        f = open(file)
         csv_file = csv.reader(f)
 
         for row in csv_file:
-            # vehicles.append(row[0])
             name, x, y, orientation, length = row
             vehicles.append(Vehicle(name, int(x), int(y), orientation, int(length)))
         f.close()
-        return board(set(vehicles))
 
     def getvehicles(self):
-        for vehicle in self.vehicles:
-            x, y = vehicle.x, vehicle.y
-        if vehicle.orientation == 'h':
-            for i in range(vehicle.length):
-                board[y][x + i] = vehicle.name
+        for Vehicle in self.vehicles:
+            x, y = Vehicle.x, Vehicle.y
+
+        if Vehicle.orientation == 'h':
+            for i in range(Vehicle.length):
+                board[y][x + i] = Vehicle.name
         else:
-            for i in range(vehicle.length):
-                board[y + i][x] = vehicle.name
+            for i in range(Vehicle.length):
+                board[y + i][x] = Vehicle.name
+
         return board
 
     def solved(self):
@@ -80,8 +80,8 @@ class board(object):
 
 
 #
-# class truck(vehicle):
+# class truck(Vehicle):
 #
-# class car(vehicle):
+# class car(Vehicle):
 #
-# class target(vehicle):
+# class target(Vehicle):
