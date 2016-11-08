@@ -18,10 +18,22 @@ class Vehicle(object):
         length: length of the vehicle (2-3)
         """
         self.name = name
-        self.x = x
-        self.y = y
-        self.orientation = orientation
-        self.length = length
+
+        if 0 <= x <= n and 0 <= y <= n:
+            self.x = x
+            self.y = y
+        else:
+            raise ValueError('Invalid value(s) of coordinate(s)')
+
+        if orientation != 'h' or 'v':
+            self.orientation = orientation
+        else:
+            raise ValueError('Invalid value for orientation')
+
+        if 2 <= length <= 3:
+            self.length = length
+        else:
+            raise ValueError('Invalid value for length')
 
     def __repr__(self):
         return "Vehicle({0}, {1}, {2}, {3}, {4})".format(self.name, self.x,
@@ -52,7 +64,7 @@ class board(object):
             vehicles.append(Vehicle(name, int(x), int(y), orientation, int(length)))
         f.close()
 
-    def getvehicles(self):
+    def getVehicles(self):
         for Vehicle in self.vehicles:
             x, y = Vehicle.x, Vehicle.y
 
@@ -64,6 +76,45 @@ class board(object):
                 board[y + i][x] = Vehicle.name
 
         return board
+
+    def isMoveable(self, Vehicle, direction, steps):
+
+        if Vehicle.orientation = 'h':
+            if direction = 'left':
+                # check if coordiantes are within the board
+                if self.x - steps >= 0:
+                    # check if die niet tegene en andere auto aanbotst, begrijpen we nog niet helemaal.
+                    # HOE KRIJGEN WE DE WAARDE UIT DE PLAATS OP HET BOARD EN CHECKEN OF HET GELIJK IS AAN NUL
+                    if self.x.......:
+
+                    else:
+                        raise ValueError ('move is not valid')
+                else:
+                    raise ValueError('move is not valid')
+            elif direction = 'right':
+                if self.x + steps <= n:
+                    if self.x.......:
+
+                    else:
+                        raise ValueError ('move is not valid')
+            else:
+                raise ValueError('please give a left or right direction')
+        else:
+            if direction = 'up':
+                if self.y - steps >= 0:
+                    #   ZELFDE PROBLEEM ALS BIJ horizontal
+                    if self.y ......:
+
+                    else:
+                        raise ValueError ('move is not valid')
+                elif direction = 'down':
+                    if self.y + steps <= n:
+                        if self.y.........:
+
+                        else:
+                            raise ValueError ('move is not valid')
+                else:
+                    raise ValueError('please give a up or down direction')
 
     def solved(self):
         if n % 2 == 0:
