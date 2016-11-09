@@ -4,6 +4,17 @@
 import numpy as np
 import csv
 
+
+def load_file(file):
+    vehicles = []
+    f = open(file)
+    csv_file = csv.reader(f)
+
+    for row in csv_file:
+        name, x, y, orientation, length = row
+        self.vehicles.append(Vehicle(name, int(x), int(y), orientation, int(length)))
+    f.close()
+
 class Vehicle(object):
     """A configuration of a single vehicle."""
 
@@ -35,7 +46,7 @@ class Vehicle(object):
         else:
             raise ValueError('Invalid value for length')
 
-class board(object):
+class Board(object):
     """
     A grid represents a rectangular region.
     The grid contains n x n positions, where there can be either a vehicle or not.
@@ -50,15 +61,6 @@ class board(object):
         self.board = np.zeros((width, height))
         self.vehicles = vehicles
 
-    def load_file(self, file):
-        vehicles = []
-        f = open(file)
-        csv_file = csv.reader(f)
-
-        for row in csv_file:
-            name, x, y, orientation, length = row
-            self.vehicles.append(Vehicle(name, int(x), int(y), orientation, int(length)))
-        f.close()
 
     def getVehicles(self):
         for Vehicle in self.vehicles:
@@ -66,23 +68,23 @@ class board(object):
 
         if Vehicle.orientation == 'h':
             for i in range(Vehicle.length):
-                board[y][x + i] = Vehicle.name
+                self.board[y][x + i] = Vehicle.name
         else:
             for i in range(Vehicle.length):
-                board[y + i][x] = Vehicle.name
+                self.board[y + i][x] = Vehicle.name
 
-        return board
+        return self.board
 
     def isMoveable(self, Vehicle, direction, steps):
 
-        if Vehicle.orientation = 'h':
-            if direction = 'left':
+        if Vehicle.orientation == 'h':
+            if direction == 'left':
                 # check if coordiantes are within the board and if it doesn't bump into another car
                 if Vehicle.x - steps >= 0 and board[Vehicle.y, Vehicle.x - steps] == 0:
                     # update the vehicle
                 else:
                     raise ValueError('move is not valid')
-            elif direction = 'right':
+            elif direction == 'right':
                 if Vehicle.x + steps <= n and board[Vehicle.y, Vehicle.x + steps] == 0:
                     # update the vehicle
                     else:
@@ -90,31 +92,31 @@ class board(object):
             else:
                 raise ValueError('please give a left or right as direction')
         else:
-            if direction = 'up':
+            if direction == 'up':
                 if Vehicle.y - steps >= 0 and board[Vehicle.y - steps, Vehicle.x] == 0:
                     #   update the vehicle
                 else:
                     raise ValueError ('move is not valid')
-            elif direction = 'down':
+            elif direction == 'down':
                 if Vehicle.y + steps <= n and board[Vehicle.y + steps, Vehicle.x] == 0:
                     #update the vehicle
                 else:
                     raise ValueError ('move is not valid')
             else:
                 raise ValueError('please give a up or down direction')
-
-    def solved(self):
-        if n % 2 == 0:
-            exitY = n / 2
-        else:
-            exitY = (n + 1) / 2
-
-        exitX = n - 2
-
-        if (target.x, target.y) == (exitX, exitY):
-            return true
-        else:
-            return false
+    #
+    # def solved(self):
+    #     if n % 2 == 0:
+    #         exitY = n / 2
+    #     else:
+    #         exitY = (n + 1) / 2
+    #
+    #     exitX = n - 2
+    #
+    #     if (target.x, target.y) == (exitX, exitY):
+    #         return true
+    #     else:
+    #         return false
 
 #
 # class truck(Vehicle):
