@@ -1,19 +1,17 @@
 # Rush Hour
 # Diederick, Valentijn en Jill
 
-import numpy as np
 import csv
 
+vehicles = []
+n = 6
 
 def load_file(file):
-    vehicles = []
-    f = open(file)
-    csv_file = csv.reader(f)
-
-    for row in csv_file:
-        name, x, y, orientation, length = row
-        self.vehicles.append(Vehicle(name, int(x), int(y), orientation, int(length)))
-    f.close()
+    with open('board1.csv', 'rb') as csv_file:
+        reader = csv.reader(csv_file)
+        for row in reader:
+            name, x, y, orientation, length = row
+            vehicles.append(Vehicle(name, int(x), int(y), orientation, int(length)))
 
 class Vehicle(object):
     """A configuration of a single vehicle."""
@@ -56,9 +54,7 @@ class Board(object):
         Initializes a board with the specified height and width
         n = integer > 0
         """
-        self.width = n
-        self.height = n
-        self.board = np.zeros((width, height))
+        self.board = [ [0] * n for _ in range(n)]
         self.vehicles = vehicles
 
 
@@ -81,12 +77,20 @@ class Board(object):
             if direction == 'left':
                 # check if coordiantes are within the board and if it doesn't bump into another car
                 if Vehicle.x - steps >= 0 and board[Vehicle.y, Vehicle.x - steps] == 0:
-                    # update the vehicle
+                    # update the vehicle and the amount of moves
+                    newX = x - steps
+                    vehicles.remove(Vehicle)
+                    vehicles.add(Vehicle(x = newX))
+                    getVehicles
                 else:
                     raise ValueError('move is not valid')
             elif direction == 'right':
                 if Vehicle.x + steps <= n and board[Vehicle.y, Vehicle.x + steps] == 0:
-                    # update the vehicle
+                    # update the vehicle and the amount of moves
+                    newX = x +steps
+                    vehicles.remove(Vehicle)
+                    vehicles.add(Vehicle(x = newX))
+                    getVehicles
                     else:
                         raise ValueError ('move is not valid')
             else:
@@ -94,12 +98,20 @@ class Board(object):
         else:
             if direction == 'up':
                 if Vehicle.y - steps >= 0 and board[Vehicle.y - steps, Vehicle.x] == 0:
-                    #   update the vehicle
+                    # update the vehicle and the amount of moves
+                    newY = y - steps
+                    vehicles.remove(Vehicle)
+                    vehicles.add(Vehicle(y = newY))
+                    getVehicles
                 else:
                     raise ValueError ('move is not valid')
             elif direction == 'down':
                 if Vehicle.y + steps <= n and board[Vehicle.y + steps, Vehicle.x] == 0:
-                    #update the vehicle
+                    # update the vehicle and the amount of moves
+                    newY = y - steps
+                    vehicles.remove(Vehicle)
+                    vehicles.add(Vehicle(y = newY))
+                    getVehicles
                 else:
                     raise ValueError ('move is not valid')
             else:
@@ -117,6 +129,12 @@ class Board(object):
     #         return true
     #     else:
     #         return false
+
+load_file()
+board = Board(n, vehicles)
+
+for i in board.getVehicles():
+    print i, "\n"
 
 #
 # class truck(Vehicle):
