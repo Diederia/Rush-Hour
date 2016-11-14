@@ -92,8 +92,8 @@ class Board(object):
                     vehicles.remove(Vehicle)
                     vehicles.add(Vehicle(x = newX))
                     getVehicles
-                    else:
-                        raise ValueError ('move is not valid')
+                else:
+                    raise ValueError('move is not valid')
             else:
                 raise ValueError('please give a left or right as direction')
         else:
@@ -105,7 +105,7 @@ class Board(object):
                     vehicles.add(Vehicle(y = newY))
                     getVehicles
                 else:
-                    raise ValueError ('move is not valid')
+                    raise ValueError('move is not valid')
             elif direction == 'down':
                 if Vehicle.y + steps <= n and board[Vehicle.y + steps, Vehicle.x] == 0:
                     # update the vehicle and the amount of moves
@@ -114,7 +114,7 @@ class Board(object):
                     vehicles.add(Vehicle(y = newY))
                     getVehicles
                 else:
-                    raise ValueError ('move is not valid')
+                    raise ValueError('move is not valid')
             else:
                 raise ValueError('please give a up or down direction')
     #
