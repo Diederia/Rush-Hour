@@ -1,6 +1,7 @@
 # Rush Hour
 # Diederick, Valentijn en Jill
 
+<<<<<<< HEAD
 import csv
 
 def main():
@@ -14,11 +15,22 @@ counter = 0
 
 def load_file(file):
     with open('csv', 'rb') as csv_file:
+=======
+# test
+import csv
+
+vehicles = []
+n = 6
+
+def load_file(file):
+    with open('board1.csv', 'rb') as csv_file:
+>>>>>>> origin/master
         reader = csv.reader(csv_file)
         for row in reader:
             name, x, y, orientation, length = row
             vehicles.append(Vehicle(name, int(x), int(y), orientation, int(length)))
 
+<<<<<<< HEAD
 # class Position(object):
 #
 #     def __init__(self, x, y):
@@ -51,6 +63,8 @@ def load_file(file):
 #         self.board[old_x][old_y] = 0
 #         return Position(new_x, new_y)
 
+=======
+>>>>>>> origin/master
 class Vehicle(object):
     """A configuration of a single vehicle."""
 
@@ -95,10 +109,15 @@ class Board(object):
         self.board = [ [0] * n for _ in range(n)]
         self.vehicles = vehicles
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
     def getVehicles(self):
         for Vehicle in self.vehicles:
             x, y = Vehicle.x, Vehicle.y
 
+<<<<<<< HEAD
             if Vehicle.orientation == 'h':
                 for i in range(Vehicle.length):
                     self.board[y][x + i] = Vehicle.name
@@ -107,8 +126,19 @@ class Board(object):
                     self.board[y + i][x] = Vehicle.name
         return self.board
 
+=======
+        if Vehicle.orientation == 'h':
+            for i in range(Vehicle.length):
+                self.board[y][x + i] = Vehicle.name
+        else:
+            for i in range(Vehicle.length):
+                self.board[y + i][x] = Vehicle.name
+
+        return self.board
+>>>>>>> origin/master
 
 
+<<<<<<< HEAD
     def isMoveable(self, Vehicle, direction):
 
         # if Vehicle.name = "input user or algoritme"
@@ -134,10 +164,33 @@ class Board(object):
                     getVehicles()
                 else:
                     raise ValueError ('move is not valid')
+=======
+        if Vehicle.orientation == 'h':
+            if direction == 'left':
+                # check if coordiantes are within the board and if it doesn't bump into another car
+                if Vehicle.x - steps >= 0 and board[Vehicle.y, Vehicle.x - steps] == 0:
+                    # update the vehicle and the amount of moves
+                    newX = x - steps
+                    vehicles.remove(Vehicle)
+                    vehicles.add(Vehicle(x = newX))
+                    getVehicles
+                else:
+                    raise ValueError('move is not valid')
+            elif direction == 'right':
+                if Vehicle.x + steps <= n and board[Vehicle.y, Vehicle.x + steps] == 0:
+                    # update the vehicle and the amount of moves
+                    newX = x +steps
+                    vehicles.remove(Vehicle)
+                    vehicles.add(Vehicle(x = newX))
+                    getVehicles
+                else:
+                    raise ValueError('move is not valid')
+>>>>>>> origin/master
             else:
                 raise ValueError('please give a left or right as direction')
         else:
             if direction == 'up':
+<<<<<<< HEAD
                 if Vehicle.y - 1 >= 0 and board[Vehicle.x, Vehicle.y - 1] == 0:
                     # update the vehicle and the amount of moves
                     counter += 1
@@ -155,10 +208,28 @@ class Board(object):
                     self.board = [Vehicle.x][Vehicle.y] = 0
                     Vehicle.y = newY
                     getVehicles()
+=======
+                if Vehicle.y - steps >= 0 and board[Vehicle.y - steps, Vehicle.x] == 0:
+                    # update the vehicle and the amount of moves
+                    newY = y - steps
+                    vehicles.remove(Vehicle)
+                    vehicles.add(Vehicle(y = newY))
+                    getVehicles
                 else:
-                    raise ValueError ('move is not valid')
+                    raise ValueError('move is not valid')
+            elif direction == 'down':
+                if Vehicle.y + steps <= n and board[Vehicle.y + steps, Vehicle.x] == 0:
+                    # update the vehicle and the amount of moves
+                    newY = y - steps
+                    vehicles.remove(Vehicle)
+                    vehicles.add(Vehicle(y = newY))
+                    getVehicles
+>>>>>>> origin/master
+                else:
+                    raise ValueError('move is not valid')
             else:
                 raise ValueError('please give a up or down direction')
+<<<<<<< HEAD
 
     def solved(self):
         if n % 2 == 0:
@@ -175,6 +246,27 @@ class Board(object):
                 return False
         else:
             return False
+=======
+    #
+    # def solved(self):
+    #     if n % 2 == 0:
+    #         exitY = n / 2
+    #     else:
+    #         exitY = (n + 1) / 2
+    #
+    #     exitX = n - 2
+    #
+    #     if (target.x, target.y) == (exitX, exitY):
+    #         return true
+    #     else:
+    #         return false
+
+load_file()
+board = Board(n, vehicles)
+
+for i in board.getVehicles():
+    print i, "\n"
+>>>>>>> origin/master
 
 load_file(file)
 board = Board(n, vehicles)
