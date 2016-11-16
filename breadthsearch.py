@@ -1,10 +1,13 @@
 # Rush Hour Breadth search algorithm
 # Diederick, Valentijn en Jill
 
+from collections  import deque
+import rushhour
+
 # 1. Maak klasse en een queue
 def bfs():
     """
-    blalaldl
+    Use breadth first search algorithm to find a solution for Rush Hour.
     """
     while Queue:
 

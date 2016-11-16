@@ -1,6 +1,10 @@
 # Rush Hour
 # Diederick, Valentijn en Jill
 
+# - bij move hebben we nog niks gereturned, waarschijnlijk moeten we het met
+# yield doen.
+#
+
 import csv
 
 def main():
@@ -199,10 +203,11 @@ class Board(object):
         """
         Save the nodes by the value of the hash.
         """
-        return self.vehicles
+        return hash(self.vehicles)
 
 load_file()
 board = Board(n, vehicles)
+
 
 for i in board.getVehicles():
     print i, "\n"
