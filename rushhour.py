@@ -140,8 +140,8 @@ class Board(object):
                 if direction == 'left':
                     # check if coordiantes are within the board and if it doesn't bump into another car.
                     if Vehicle.x - 1 >= 0 and board[Vehicle.x - 1, Vehicle.y] == 0:
-                        # Nu gaat die goed bij deze! 
-                        new_Vehicle = Vehicle(Vehicle.name, Vehicle.x, Vehicle.y - 1, Vehicle.orientation, Vehicle.length)
+                        # Nu gaat die goed bij deze!
+                        new_Vehicle = Vehicle(Vehicle.name, Vehicle.x - 1, Vehicle.y, Vehicle.orientation, Vehicle.length)
                         new_vehicles = self.vehicles.Copy()
                         new_vehicles.Remove(Vehicle)
                         new_vehicles.Add(new_Vehicle)
@@ -152,10 +152,11 @@ class Board(object):
                         # Check next position is within the board and is still free(0).
                         if (Vehicle.x + Vehicle.length <= n and board[Vehicle.x + Vehicle.length, Vehicle.y ] == 0:)
                         # count moves, update the vehicle next position and clears the old position.
-                        newX = x + 1
-                        self.board = [Vehicle.x][Vehicle.y] = 0
-                        Vehicle.x = newX
-                        getVehicles()
+                        new_Vehicle = Vehicle(Vehicle.name, Vehicle.x + 1, Vehicle.y, Vehicle.orientation, Vehicle.length)
+                        new_vehicles = self.vehicles.Copy()
+                        new_vehicles.Remove(Vehicle)
+                        new_vehicles.Add(new_Vehicle)
+                        yield Board(new_vehicles)
                     else:
                         raise ValueError ('move is not valid')
                 else:
@@ -165,19 +166,21 @@ class Board(object):
                     # Check next position is within the board and is still free(0).
                     if Vehicle.y - 1 >= 0 and board[Vehicle.x, Vehicle.y - 1] == 0:
                         # Update the vehicle next position and clears the old position.
-                        self.board = [Vehicle.x][newY + Vehicle.length] = 0
-                        Vehicle.y = newY
-                        getVehicles()
-                    else:
+                        new_Vehicle = Vehicle(Vehicle.name, Vehicle.x, Vehicle.y - 1, Vehicle.orientation, Vehicle.length)
+                        new_vehicles = self.vehicles.Copy()
+                        new_vehicles.Remove(Vehicle)
+                        new_vehicles.Add(new_Vehicle)
+                        yield Board(new_vehicles)                    else:
                         raise ValueError ('move is not valid')
                 elif direction == 'down':
                     # Check next position is within the board and is still free(0).
                     if (Vehicle.y + Vehicle.length <= n and board[Vehicle.x, Vehicle.y + Vehicle.length] == 0:)
                         # Update the vehicle next position and clears the old position.
-                        newY = y + 1
-                        self.board = [Vehicle.x][Vehicle.y] = 0
-                        Vehicle.y = newY
-                        getVehicles()
+                        new_Vehicle = Vehicle(Vehicle.name, Vehicle.x, Vehicle.y + 1, Vehicle.orientation, Vehicle.length)
+                        new_vehicles = self.vehicles.Copy()
+                        new_vehicles.Remove(Vehicle)
+                        new_vehicles.Add(new_Vehicle)
+                        yield Board(new_vehicles)
                     else:
                         raise ValueError('move is not valid')
                 else:
