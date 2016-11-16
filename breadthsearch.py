@@ -1,18 +1,46 @@
 # Rush Hour Breadth search algorithm
 # Diederick, Valentijn en Jill
 
-from collections  import deque
+from collections import deque
 import rushhour
 
-# 1. Maak klasse en een queue
-def bfs():
+def bfs(begin_board, max_depth=30):
     """
     Use breadth first search algorithm to find a solution for Rush Hour.
-    """
-    while Queue:
 
-        # 2. Add beginpuzzel op de queue: get the first node from the queue
-        node = Queque.pop(0)
+    Arguments:
+    begin_board: The begin position of the board wanting to solve
+    max_depth: Least amount of steps to solve the rush hour puzzle
+    """
+    archive = set()
+    solution = list()
+    queue = deque()
+    queue.appendleft((begin_board, tuple()))
+    while len(queue) != 0:
+
+        # add begin board on the queue
+        board, path = queue.pop()
+
+        # make all children from current board state
+        new_path = path + tuple([board])
+
+        # stop if amount of moves is to much
+        if len(new_path) >= max_depth:
+            break
+
+        if board in archive:
+            continue
+        else:
+            archive.add(board)
+
+        # check if board is already solved (yes? Stop and return)
+        if board.solved():
+            solution.append(new_path)
+            return solution
+        else:
+            # add all children to the queue
+            queue.extendleft((move, new_path)) for move in board.isMoveable()
+
 
 # 3. Remove bovenste item van de queue (Leeg? Stop, geen oplossing)
 
