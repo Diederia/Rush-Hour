@@ -4,7 +4,7 @@
 from collections import deque
 import rushhour
 
-def bfs(begin_board, max_depth=30):
+def bfs(begin_board, max_depth=100):
     """
     Use breadth first search algorithm to find a solution for Rush Hour.
 
