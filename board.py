@@ -15,6 +15,18 @@ class Board(object):
         self.board = []
         self.vehicles = vehicles
 
+    def load_file():
+        """
+        Load the file of the user, each row is a vehicle. Read out all the vehicles
+        and store them in vehicles.
+        """
+        with open('csv', 'rb') as csv_file:
+            reader = csv.reader(csv_file)
+            for row in reader:
+                name, x, y, orientation, length = row
+                vehicles.append(Vehicle(name, int(x), int(y), orientation, int(length)))
+
+
     def getVehicles(self):
         """
         Retrun a board filled with all vehicles.
@@ -53,7 +65,7 @@ class Board(object):
                     new_vehicles.add(new_vehicle)
                     yield Board(new_vehicles)
                 # Check next position is within the board and is still free(0).
-                if (Vehicle.x + Vehicle.length <= n and board[Vehicle.x + Vehicle.length, Vehicle.y ] == 0:)
+                if (Vehicle.x + Vehicle.length <= n and board[Vehicle.x + Vehicle.length, Vehicle.y ] == 0):
                     # count moves, update the vehicle next position and clears the old position.
                     new_vehicle = Vehicle(vehicle.name, vehicle.x + 1, vehicle.y, vehicle.orientation, vehicle.length)
                     new_vehicles = self.vehicles.copy()
@@ -70,7 +82,7 @@ class Board(object):
                     new_vehicles.add(new_vehicle)
                     yield Board(new_vehicles)
                 # Check next position is within the board and is still free(0).
-                if (Vehicle.y + Vehicle.length <= n and board[Vehicle.x, Vehicle.y + Vehicle.length] == 0:)
+                if (Vehicle.y + Vehicle.length <= n and board[Vehicle.x, Vehicle.y + Vehicle.length] == 0):
                     # Update the vehicle next position and clears the old position.
                     new_vehicle = Vehicle(vehicle.name, vehicle.x, vehicle.y + 1, vehicle.orientation, vehicle.length)
                     new_vehicles = self.vehicles.copy()
@@ -97,4 +109,9 @@ class Board(object):
         """
         Save the vehicles by the value of the hash.
         """
-        return hash(self.vehicles)
+        return hash(self.__repr__)
+
+    def __repr__(self):
+        """
+        nog te bedenken representatie van het board
+        """

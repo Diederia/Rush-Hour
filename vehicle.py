@@ -28,3 +28,10 @@ class Vehicle(object):
             self.length = length
         else:
             raise ValueError('Invalid value for length')
+
+    def __hash__(self):
+        return hash(self.__repr__())
+
+    def __repr__(self):
+        return "Vehicle({0}, {1}, {2}, {3}, {4})".format(self.name, self.x,
+        self.y, self.orientation, self.length)

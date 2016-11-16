@@ -2,9 +2,9 @@
 # Diederick, Valentijn en Jill
 
 from collections import deque
-import rushhour
+from rushhour import *
 
-def bfs(begin_board, max_depth=100):
+def bfs(board, max_depth=100):
     """
     Use breadth first search algorithm to find a solution for Rush Hour.
 
@@ -39,7 +39,14 @@ def bfs(begin_board, max_depth=100):
             return solution
         else:
             # add all children to the queue
-            queue.extendleft((move, new_path)) for move in board.isMoveable()
+            queue.extendleft((move, new_path) for move in board.isMoveable())
+
+
+def solution_moves(solution):
+    moves = []
+
+    return moves
+
 
 
 # 3. Remove bovenste item van de queue (Leeg? Stop, geen oplossing)
