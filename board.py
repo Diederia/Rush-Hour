@@ -1,3 +1,5 @@
+import vehicle
+
 vehicles = []
 
 class Board(object):
@@ -40,57 +42,41 @@ class Board(object):
         # ga door alle vehicles en kijk welke isMovable
         # if Vehicle.name = "input user or algoritme"
         board = self.getVehicles()
-        for Vehicle in vehicles:
-            if Vehicle.orientation == 'h':
-                if direction == 'left':
-                    # check if coordiantes are within the board and if it doesn't bump into another car.
-                    if Vehicle.x - 1 >= 0 and board[Vehicle.x - 1, Vehicle.y] == 0:
-                        # Nu gaat die goed bij deze!
-                        new_Vehicle = Vehicle(Vehicle.name, Vehicle.x - 1, Vehicle.y, Vehicle.orientation, Vehicle.length)
-                        new_Vehicle = Vehicle(Vehicle.name, Vehicle.x, Vehicle.y - 1, Vehicle.orientation, Vehicle.length)
-                        new_vehicles = self.vehicles.Copy()
-                        new_vehicles.Remove(Vehicle)
-                        new_vehicles.Add(new_Vehicle)
-                        yield Board(new_vehicles)
-                    else:
-                        raise ValueError('move is not valid')
-                    elif direction == 'right':
-                        # Check next position is within the board and is still free(0).
-                        if (Vehicle.x + Vehicle.length <= n and board[Vehicle.x + Vehicle.length, Vehicle.y ] == 0:)
-                        # count moves, update the vehicle next position and clears the old position.
-                        new_Vehicle = Vehicle(Vehicle.name, Vehicle.x + 1, Vehicle.y, Vehicle.orientation, Vehicle.length)
-                        new_vehicles = self.vehicles.Copy()
-                        new_vehicles.Remove(Vehicle)
-                        new_vehicles.Add(new_Vehicle)
-                        yield Board(new_vehicles)
-                    else:
-                        raise ValueError ('move is not valid')
-                else:
-                    raise ValueError('please give a left or right as direction')
+        for vehicle in vehicles:
+            if vehicle.orientation == 'h':
+                # check if coordiantes are within the board and if it doesn't bump into another car.
+                if vehicle.x - 1 >= 0 and board[vehicle.x - 1, vehicle.y] == 0:
+                    # Nu gaat die goed bij deze!
+                    new_vehicle = Vehicle(vehicle.name, vehicle.x - 1, vehicle.y, vehicle.orientation, vehicle.length)
+                    new_vehicles = self.vehicles.copy()
+                    new_vehicles.remove(vehicle)
+                    new_vehicles.add(new_vehicle)
+                    yield Board(new_vehicles)
+                # Check next position is within the board and is still free(0).
+                if (Vehicle.x + Vehicle.length <= n and board[Vehicle.x + Vehicle.length, Vehicle.y ] == 0:)
+                    # count moves, update the vehicle next position and clears the old position.
+                    new_vehicle = Vehicle(vehicle.name, vehicle.x + 1, vehicle.y, vehicle.orientation, vehicle.length)
+                    new_vehicles = self.vehicles.copy()
+                    new_vehicles.remove(vehicle)
+                    new_vehicles.add(new_vehicle)
+                    yield Board(new_vehicles)
             else:
-                if direction == 'up':
-                    # Check next position is within the board and is still free(0).
-                    if Vehicle.y - 1 >= 0 and board[Vehicle.x, Vehicle.y - 1] == 0:
-                        # Update the vehicle next position and clears the old position.
-                        new_Vehicle = Vehicle(Vehicle.name, Vehicle.x, Vehicle.y - 1, Vehicle.orientation, Vehicle.length)
-                        new_vehicles = self.vehicles.Copy()
-                        new_vehicles.Remove(Vehicle)
-                        new_vehicles.Add(new_Vehicle)
-                        yield Board(new_vehicles)                    else:
-                        raise ValueError ('move is not valid')
-                elif direction == 'down':
-                    # Check next position is within the board and is still free(0).
-                    if (Vehicle.y + Vehicle.length <= n and board[Vehicle.x, Vehicle.y + Vehicle.length] == 0:)
-                        # Update the vehicle next position and clears the old position.
-                        new_Vehicle = Vehicle(Vehicle.name, Vehicle.x, Vehicle.y + 1, Vehicle.orientation, Vehicle.length)
-                        new_vehicles = self.vehicles.Copy()
-                        new_vehicles.Remove(Vehicle)
-                        new_vehicles.Add(new_Vehicle)
-                        yield Board(new_vehicles)
-                    else:
-                        raise ValueError('move is not valid')
-                else:
-                    raise ValueError('please give a up or down direction')
+                # Check next position is within the board and is still free(0).
+                if Vehicle.y - 1 >= 0 and board[Vehicle.x, Vehicle.y - 1] == 0:
+                    # Update the vehicle next position and clears the old position.
+                    new_vehicle = Vehicle(vehicle.name, vehicle.x, vehicle.y - 1, vehicle.orientation, vehicle.length)
+                    new_vehicles = self.vehicles.copy()
+                    new_vehicles.remove(vehicle)
+                    new_vehicles.add(new_vehicle)
+                    yield Board(new_vehicles)
+                # Check next position is within the board and is still free(0).
+                if (Vehicle.y + Vehicle.length <= n and board[Vehicle.x, Vehicle.y + Vehicle.length] == 0:)
+                    # Update the vehicle next position and clears the old position.
+                    new_vehicle = Vehicle(vehicle.name, vehicle.x, vehicle.y + 1, vehicle.orientation, vehicle.length)
+                    new_vehicles = self.vehicles.copy()
+                    new_vehicles.remove(vehicle)
+                    new_vehicles.add(new_vehicle)
+                    yield Board(new_vehicles)
 
     def solved(self):
         """
@@ -98,13 +84,14 @@ class Board(object):
         """
         exitX = n - 2
 
-        if Vehicle.name == x:
-            if Vehicle.x == exitX:
-                return True
+        for vehicle in vehicles:
+            if vehicle.name == x:
+                if vehicle.x == exitX:
+                    return True
+                else:
+                    return False
             else:
                 return False
-        else:
-            return False
 
     def __hash__(self):
         """
