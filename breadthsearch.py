@@ -2,9 +2,10 @@
 # Diederick, Valentijn en Jill
 
 from collections import deque
+from board import *
 from rushhour import *
 
-def bfs(board, max_depth=100):
+def algorithm(board, max_depth=100):
     """
     Use breadth first search algorithm to find a solution for Rush Hour.
 
@@ -12,6 +13,7 @@ def bfs(board, max_depth=100):
     begin_board: The begin position of the board wanting to solve
     max_depth: Least amount of steps to solve the rush hour puzzle
     """
+    begin_board = Board(n, vehicles)
     archive = set()
     solution = list()
     queue = deque()
@@ -39,11 +41,14 @@ def bfs(board, max_depth=100):
             return solution
         else:
             # add all children to the queue
-            queue.extendleft((move, new_path) for move in board.isMoveable())
+            queue.extendleft((move, new_path) for move in board.getMoves())
 
 
-def solution_moves(solution):
+def solution(solution):
     moves = []
+    moves = solution
+    # for i in range(len(solution)):
+        # Get info if step is up,down,left,right
 
     return moves
 

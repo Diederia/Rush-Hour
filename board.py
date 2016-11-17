@@ -1,6 +1,7 @@
-import vehicle
-
+from vehicle import *
+from rushhour import *
 vehicles = []
+
 
 class Board(object):
     """
@@ -27,7 +28,7 @@ class Board(object):
                 vehicles.append(Vehicle(name, int(x), int(y), orientation, int(length)))
 
 
-    def getVehicles(self):
+    def createBoard(self):
         """
         Retrun a board filled with all vehicles.
         """
@@ -44,7 +45,7 @@ class Board(object):
                     self.board[y + i][x] = Vehicle.name
         return self.board
 
-    def isMoveable(self, Vehicle, direction):
+    def getMoves(self):
 
         """
         Move the vehicle if the next position of the car is within the board
@@ -53,7 +54,7 @@ class Board(object):
         """
         # ga door alle vehicles en kijk welke isMovable
         # if Vehicle.name = "input user or algoritme"
-        board = self.getVehicles()
+        board = self.createBoard()
         for vehicle in vehicles:
             if vehicle.orientation == 'h':
                 # check if coordiantes are within the board and if it doesn't bump into another car.
@@ -90,6 +91,10 @@ class Board(object):
                     new_vehicles.add(new_vehicle)
                     yield Board(new_vehicles)
 
+    def updateBoard():
+
+
+
     def solved(self):
         """
         Return True if vehicle x is at the exit of the board, False otherwise.
@@ -105,13 +110,18 @@ class Board(object):
             else:
                 return False
 
-    def __hash__(self):
-        """
-        Save the vehicles by the value of the hash.
-        """
-        return hash(self.__repr__)
-
-    def __repr__(self):
-        """
-        nog te bedenken representatie van het board
-        """
+    # def __hash__(self):
+    #     """
+    #     Save the vehicles by the value of the hash.
+    #     """
+    #     return hash(self.__repr__)
+    #
+    # def __repr__(self):
+    #     """
+    #     nog te bedenken representatie van het board
+    #     """
+    #     s = '-' * 8 + '\n'
+    #     for line in self.createBoard():
+    #         s += '|{0}|\n'.format(''.join(line))
+    #     s += '-' * 8 + '\n'
+    #     return s
