@@ -14,8 +14,8 @@ class Vehicle(object):
         self.name = name
 
         if 0 <= x <= n and 0 <= y <= n:
-            self.x = x
-            self.y = y
+            self.x = int(x)
+            self.y = int(y)
         else:
             raise ValueError('Invalid value(s) of coordinate(s)')
 
@@ -25,7 +25,7 @@ class Vehicle(object):
             raise ValueError('Invalid value for orientation')
 
         if 2 <= length <= 3:
-            self.length = length
+            self.length = int(length)
         else:
             raise ValueError('Invalid value for length')
 

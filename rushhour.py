@@ -6,20 +6,16 @@
 #
 import sys
 # import csv
+from board import *
 from breadthsearch import *
-n = 0
+n = 6
 def setN(val):
     global n
     n = val
 
-if __name__ == "__main__":
-    # if len(sys.argv) != 4:
-    #     print("Give four input argument; python rushhour.py algorithm file dimension")
-    # else:
-    csv = sys.argv[1]
-    setN(sys.argv[2])
-    algorithm(csv, 1000)
-    print solution(solution)
+
+
+    #print solution(solution)
 
 
 
