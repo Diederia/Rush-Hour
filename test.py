@@ -148,7 +148,7 @@ def bfs(board, max_depth=100):
             return solution
         else:
             # add all children to the queue
-            queue.extendleft((move, new_path) for move in Board(vehicles, n).getMoves())
+            queue.extendleft((move, new_path) for move in Board(n, vehicles).getMoves())
 
     print solution
 
