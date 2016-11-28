@@ -28,3 +28,13 @@ def a_star_search(graph, start, goal):
                 came_from[next] = current
 
     return came_from, cost_so_far
+
+def reconstruct_path(came_from, start, goal):
+    current = goal
+    path = [current]
+    while current != start:
+        current = came_from[current]
+        path.append(current)
+    path.append(start) # optional
+    path.reverse() # optional
+    return path
