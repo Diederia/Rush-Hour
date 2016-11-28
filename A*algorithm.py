@@ -1,22 +1,24 @@
 # http://www.redblobgames.com/pathfinding/a-star/implementation.html
+from grid import *
 
 def heuristic(a, b):
     (x1, y1) = a
     (x2, y2) = b
     return abs(x1 - x2) + abs(y1 - y2)
 
-def a_star_search(graph, start, goal):
+def a_star_search(graph, game):
     frontier = PriorityQueue()
-    frontier.put(start, 0)
+    frontier.add(game, 0)
     came_from = {}
     cost_so_far = {}
-    came_from[start] = None
-    cost_so_far[start] = 0
+    came_from[game] = None
+    cost_so_far[game] = 0
 
     while not frontier.empty():
         current = frontier.get()
 
-        if current == goal:
+        # how do you use solved?
+        if current == board.solved():
             break
 
         for next in graph.neighbors(current):
@@ -29,7 +31,7 @@ def a_star_search(graph, start, goal):
 
     return came_from, cost_so_far
 
-def reconstruct_path(came_from, start, goal):
+def reconstruct_path(came_from, game, goal):
     current = goal
     path = [current]
     while current != start:
