@@ -87,6 +87,9 @@ if __name__ == '__main__':
     global exit_y
     global n
 
+    if len(sys.argv) != 3:
+        print "Usage example: python Board/board.csv algorithm filename.py"
+
     csv_file = sys.argv[1]
     algorithm = sys.argv[2]
 
