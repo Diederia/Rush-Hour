@@ -1,20 +1,27 @@
 from copy import deepcopy
 from rushhour import *
+import numpy
 
-n = 6
 
 class Grid(object):
     """A configuration of a single Rush Hour board."""
 
-    def __init__(self, vehicles, begin_board):
+    def __init__(self, vehicles, begin_board, n):
         """Create a new Rush Hour board.
 
         Arguments:
             vehicles: a set of Vehicle objects.
             begin_board: the board to start with.
         """
+        self.n = n
         self.vehicles = vehicles
         self.board = begin_board
+
+        self.exit_x = self.n - 1
+        if n != 9:
+            self.exit_y = self.n / 2 - 1
+        else:
+            self.exit_y = self.n / 2
 
     def __hash__(self):
         return hash(self.__repr__())
@@ -34,25 +41,26 @@ class Grid(object):
 
     def solved(self):
         """Returns true if the board is in a solved state."""
-        exit_x = n - 2
-        for vehicle in self.vehicles:
-            if vehicle.name == 'x':
-                if vehicle.x == exit_x:
-                    return True
-                else:
-                    return False
-        #
-        # if self.board[exit_y][exit_x] == 'x':
-        #     return True
-        # else:
-        #     return False
+        # exit_x = self.n - 2
+        # for vehicle in self.vehicles:
+        #     if vehicle.name == 'x':
+        #         if vehicle.x == exit_x:
+        #             return True
+        #         else:
+        #             return False
+
+        if self.board[self.exit_y][self.exit_x] == 'x':
+            return True
+        else:
+            return False
 
     def getMoves(self):
         """Return iterator of next possible moves."""
         for vehicle in self.vehicles:
             if vehicle.orientation == 'h':
                 # LEFT
-                if vehicle.x - 1 >= 0 and self.board[vehicle.y][vehicle.x - 1] == ' ':
+                if (vehicle.x - 1 >= 0 and
+                    self.board[vehicle.y][vehicle.x - 1] == ' '):
                     # print self.vehicles
                     # print Grid(self.vehicles, self.board)
                     new_vehicle = Vehicle(vehicle.name, vehicle.x - 1, vehicle.y, vehicle.orientation, vehicle.length)
@@ -65,10 +73,11 @@ class Grid(object):
                     # print new_board
                     # print test_board
                     # print 'test1'
-                    # print Grid(new_vehicles, new_board)
-                    yield Grid(new_vehicles, new_board)
+                    # print Grid(new_vehicles, new_board, self.n)
+                    yield Grid(new_vehicles, new_board, self.n)
                 # RIGHT
-                if vehicle.x + vehicle.length < n and self.board[vehicle.y][vehicle.x + vehicle.length] == ' ':
+                if (vehicle.x + vehicle.length < self.n and
+                self.board[vehicle.y][vehicle.x + vehicle.length] == ' '):
                     # print self.vehicles
                     # print Grid(self.vehicles, self.board)
                     new_vehicle = Vehicle(vehicle.name, vehicle.x + 1, vehicle.y, vehicle.orientation, vehicle.length)
@@ -78,12 +87,14 @@ class Grid(object):
                     new_board = deepcopy(self.board)
                     new_board[vehicle.y][vehicle.x + vehicle.length] = vehicle.name
                     new_board[vehicle.y][vehicle.x] = ' '
+                    # print new_board
                     # print 'test2'
-                    # print Grid(new_vehicles, new_board)
-                    yield Grid(new_vehicles, new_board)
+                    # print Grid(new_vehicles, new_board, self.n)
+                    yield Grid(new_vehicles, new_board, self.n)
             else:
                 # UPP
-                if vehicle.y - 1 >= 0 and self.board[vehicle.y - 1][vehicle.x] == ' ':
+                if (vehicle.y - 1 >= 0 and
+                    self.board[vehicle.y - 1][vehicle.x] == ' '):
                     # print self.vehicles
                     # print Grid(self.vehicles, self.board)
                     new_vehicle = Vehicle(vehicle.name, vehicle.x, vehicle.y - 1, vehicle.orientation, vehicle.length)
@@ -93,11 +104,13 @@ class Grid(object):
                     new_board = deepcopy(self.board)
                     new_board[vehicle.y - 1][vehicle.x] = vehicle.name
                     new_board[vehicle.y + vehicle.length - 1][vehicle.x] = ' '
+                    new_board
                     # print 'test3'
-                    # print Grid(new_vehicles, new_board)
-                    yield Grid(new_vehicles, new_board)
+                    # print Grid(new_vehicles, new_board, self.n)
+                    yield Grid(new_vehicles, new_board, self.n)
                 # DOWN
-                if vehicle.y + vehicle.length < n and self.board[vehicle.y + vehicle.length][vehicle.x] == ' ':
+                if (vehicle.y + vehicle.length < self.n and
+                    self.board[vehicle.y + vehicle.length][vehicle.x] == ' '):
                     # print self.vehicles
                     # print Grid(self.vehicles, self.board)
                     new_vehicle = Vehicle(vehicle.name, vehicle.x, vehicle.y + 1, vehicle.orientation, vehicle.length)
@@ -107,6 +120,7 @@ class Grid(object):
                     new_board = deepcopy(self.board)
                     new_board[vehicle.y + vehicle.length][vehicle.x] = vehicle.name
                     new_board[vehicle.y][vehicle.x] = ' '
+                    # print new_board
                     # print 'test4'
-                    # print Grid(new_vehicles, new_board)
-                    yield Grid(new_vehicles, new_board)
+                    # print Grid(new_vehicles, new_board, self.n)
+                    yield Grid(new_vehicles, new_board, self.n)

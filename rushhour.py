@@ -6,7 +6,7 @@ from vehicle import Vehicle
 from breadthsearch import *
 from grid import *
 
-def load_file(rushhour_file):
+def load_file(rushhour_file, n):
     vehicles = []
     with open(csv_file, 'rb') as csv_open_file:
         reader = csv.reader(csv_open_file)
@@ -23,7 +23,7 @@ def load_file(rushhour_file):
         else:
             for i in range(vehicle.length):
                 begin_board[y + i][x] = vehicle.name
-    return Grid(set(vehicles),begin_board)
+    return Grid(set(vehicles), begin_board, n)
 
 
 def solution_steps(results):
@@ -59,7 +59,7 @@ if __name__ == '__main__':
 
     csv_file = sys.argv[1]
     # algorithm = sys.argv[2]
-    
+
     if (csv_file == 'Boards/board1.csv' or csv_file == 'Boards/board2.csv'
         or csv_file == 'Boards/board3.csv'):
         n = 6
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     else:
         exit_y = n / 2
 
-    game = load_file(csv_file)
+    game = load_file(csv_file, n)
     solution, end_time = bfs(game, 10000)
     # for solution in result['solution']:
     print visualize(solution)
