@@ -134,3 +134,12 @@ class Grid(object):
             else:
                 if currentPlace != ' ':
                     vehiclesBocking += 5
+
+    def fromGoal(self, move):
+        score = 0
+        for i in range(self.n):
+            currentPlace = self.board[self.exit_y][self.n - (i + 1)]
+            if currentPlace == 'x':
+                return score
+            else:
+                score += 3

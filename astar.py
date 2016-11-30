@@ -42,7 +42,7 @@ def a_star_search(game):
             new_cost = cost[board] + 1
             if move not in cost or new_cost < cost[move]:
                 cost[move] = new_cost
-                priority = new_cost + board.blockerEstimate(move)
+                priority = new_cost + board.blockerEstimate(move) + board.fromGoal(move)
                 queue.put(move, priority)
                 came_from[move] = board
 
