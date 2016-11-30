@@ -58,7 +58,9 @@ if __name__ == '__main__':
     global n
 
     csv_file = sys.argv[1]
-    # algorithm = sys.argv[2]
+    algorithm = sys.argv[2]
+
+    game = load_file(csv_file, n)
 
     if (csv_file == 'Boards/board1.csv' or csv_file == 'Boards/board2.csv'
         or csv_file == 'Boards/board3.csv'):
@@ -69,15 +71,13 @@ if __name__ == '__main__':
     else:
         n = 12
 
-    exit_x = n - 1
-    if n != 9:
-        exit_y = n / 2 - 1
+    if algorithm == A*:
+        solution, end_time = a_star_search(game)
+    elif algorithm == bfs:
+        solution, end_time = bfs(game, 10000)
     else:
-        exit_y = n / 2
+        print 'Please enter A* or bfs'
 
-    game = load_file(csv_file, n)
-    solution, end_time = bfs(game, 10000)
-    # for solution in result['solution']:
     print visualize(solution)
     # for solution in result['solution']:
     print 'Solution steps: {0}'.format(', '.join(solution_steps(solution)))

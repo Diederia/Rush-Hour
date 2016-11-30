@@ -1,4 +1,4 @@
-import queue
+import Queue
 
 def blockerEstimate(board):
     vehiclesBocking = 0
@@ -22,7 +22,7 @@ def reconstruct_path(came_from, start, goal):
 
 # path is came from
 def a_star_search(game):
-    queue = queue.PriorityQueue()
+    queue = Queue.PriorityQueue()
     queue.put(game, 0)
     archive = set()
     path = dict()
@@ -44,7 +44,8 @@ def a_star_search(game):
             solution.append(PATH)
             end = time.clock()
             end_time = end - start
-            return reconstruct_path(path, game, solution), end_time
+            return solution, end_time
+            # return reconstruct_path(path, game, solution), end_time
 
         for move in board.getMoves():
             new_cost = cost[board] + 1
