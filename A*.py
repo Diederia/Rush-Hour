@@ -9,6 +9,17 @@ def blockerEstimate(board):
                 vehiclesBocking += 1
     return vehiclesBocking
 
+
+def reconstruct_path(came_from, start, goal):
+    current = goal
+    path = [current]
+    while current != start:
+        current = came_from[current]
+        path.append(current)
+    path.append(start)
+    path.reverse()
+    return path
+
 # path is came from
 def a_star_search(game):
     queue = queue.PriorityQueue()
@@ -33,7 +44,7 @@ def a_star_search(game):
             solution.append(PATH)
             end = time.clock()
             end_time = end - start
-            return solution, end_time
+            return reconstruct_path(path, game, solution), end_time
 
         for move in board.getMoves():
             new_cost = cost[board] + 1
@@ -41,19 +52,9 @@ def a_star_search(game):
                 cost[move] = new_cost
                 priority = new_cost + blockerEstimate(move)
                 queue.add(move, priority)
-
+    return 'No solution found!'
 """
 http://www.redblobgames.com/pathfinding/a-star/implementation.html
 
 Wat te doen, archief maken voor de astar
 """
-
-def reconstruct_path(came_from, start, goal):
-    current = goal
-    path = [current]
-    while current != start:
-        current = came_from[current]
-        path.append(current)
-    path.append(start) # optional
-    path.reverse() # optional
-    return path
