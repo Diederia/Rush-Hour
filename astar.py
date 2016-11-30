@@ -16,7 +16,7 @@ def reconstruct_path(came_from, start, goal):
 def a_star_search(game):
     queue = Queue.PriorityQueue()
     queue.put(game, 0)
-    archive = set()
+    # archive = set()
     came_from = dict()
     cost = dict()
     path = list()
