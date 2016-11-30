@@ -76,7 +76,7 @@ def visualize_astar(results):
     os.system('clear')
     for i in range (len(solution) - 1):
         print (solution[i])
-        time.sleep(.001)
+        time.sleep(.1)
         os.system('clear')
     print solution[i + 1]
     print len(solution)

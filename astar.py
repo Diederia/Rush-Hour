@@ -47,6 +47,7 @@ def a_star_search(game):
                 came_from[move] = board
 
     return 'No solution found!'
+    
 """
 http://www.redblobgames.com/pathfinding/a-star/implementation.html
 
