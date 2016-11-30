@@ -31,6 +31,7 @@ def bfs(game, max_depth):
             archive.add(board)
 
         if board.solved():
+            print new_path
             solution.append(new_path)
             end = time.clock()
             end_time = end - start

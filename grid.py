@@ -124,3 +124,13 @@ class Grid(object):
                     # print 'test4'
                     # print Grid(new_vehicles, new_board, self.n)
                     yield Grid(new_vehicles, new_board, self.n)
+
+    def blockerEstimate(self, move):
+        vehiclesBocking = 0
+        for i in range(self.n):
+            currentPlace = self.board[self.exit_y][self.n - (i + 1)]
+            if currentPlace == 'x':
+                return vehiclesBocking
+            else:
+                if currentPlace != ' ':
+                    vehiclesBocking += 5

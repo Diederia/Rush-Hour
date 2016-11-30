@@ -5,6 +5,7 @@ import time
 from vehicle import Vehicle
 from breadthsearch import *
 from grid import *
+from astar import *
 
 def load_file(rushhour_file, n):
     vehicles = []
@@ -26,7 +27,7 @@ def load_file(rushhour_file, n):
     return Grid(set(vehicles), begin_board, n)
 
 
-def solution_steps(results):
+def solution_steps_bfs(results):
     """Generate list of steps to the solution ."""
     steps = []
     for i in range(len(solution[0]) - 1):
@@ -43,13 +44,42 @@ def solution_steps(results):
             steps.append('step %d: {0} up'.format(vehicle1.name) %i)
     return steps
 
-def visualize(results):
+def solution_steps_astar(results):
+    """Generate list of steps to the solution ."""
+    steps = []
+    # print solution
+    solution1 = solution[1:]
+    for i in range(len(solution1) - 1):
+        board1, board2 = solution1[i], solution1[i + 1]
+        vehicle1 = list(board1.vehicles - board2.vehicles)[0]
+        vehicle2 = list(board2.vehicles - board1.vehicles)[0]
+        if vehicle1.x < vehicle2.x:
+            steps.append('step %d: {0} right'.format(vehicle1.name) %i)
+        elif vehicle1.x > vehicle2.x:
+            steps.append('step %d: {0} left'.format(vehicle1.name) %i)
+        elif vehicle1.y < vehicle2.y:
+            steps.append('step %d: {0} down'.format(vehicle1.name) %i)
+        elif vehicle1.y > vehicle2.y:
+            steps.append('step %d: {0} up'.format(vehicle1.name) %i)
+    return steps
+
+def visualize_bfs(results):
     os.system('clear')
     for i in range (len(solution[0]) - 1):
         print (solution[0][i])
         time.sleep(.1)
         os.system('clear')
     print solution[0][i + 1]
+    return 'Rush hour board is Completed! The solution steps are displayed below:'
+
+def visualize_astar(results):
+    os.system('clear')
+    for i in range (len(solution) - 1):
+        print (solution[i])
+        time.sleep(.001)
+        os.system('clear')
+    print solution[i + 1]
+    print len(solution)
     return 'Rush hour board is Completed! The solution steps are displayed below:'
 
 if __name__ == '__main__':
@@ -60,8 +90,6 @@ if __name__ == '__main__':
     csv_file = sys.argv[1]
     algorithm = sys.argv[2]
 
-    game = load_file(csv_file, n)
-
     if (csv_file == 'Boards/board1.csv' or csv_file == 'Boards/board2.csv'
         or csv_file == 'Boards/board3.csv'):
         n = 6
@@ -71,15 +99,18 @@ if __name__ == '__main__':
     else:
         n = 12
 
-    if algorithm == A*:
+    game = load_file(csv_file, n)
+
+
+    if algorithm == 'astar':
         solution, end_time = a_star_search(game)
-    elif algorithm == bfs:
+        print visualize_astar(solution)
+        print 'Solution steps: {0}'.format(', '.join(solution_steps_astar(solution)))
+    elif algorithm == 'bfs':
         solution, end_time = bfs(game, 10000)
+        print visualize_bfs(solution)
+        print 'Solution steps: {0}'.format(', '.join(solution_steps_bfs(solution)))
     else:
         print 'Please enter A* or bfs'
-
-    print visualize(solution)
-    # for solution in result['solution']:
-    print 'Solution steps: {0}'.format(', '.join(solution_steps(solution)))
 
     print 'Time to find solution of the board: {0}'.format(end_time) + '.'
