@@ -1,7 +1,7 @@
 
 
 class Vehicle(object):
-    """A configuration of a single vehicle."""
+    """A configuration of a single vehicle. hallooo """
 
     def __init__(self, name, x, y, orientation, length):
         """Create a new vehicle.
