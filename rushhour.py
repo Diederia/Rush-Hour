@@ -114,6 +114,6 @@ if __name__ == '__main__':
         print visualize_bfs(solution)
         print 'Solution steps: {0}'.format(', '.join(solution_steps_bfs(solution)))
     else:
-        print 'Please enter astar or bfs'
+        print 'Please enter A* or bfs'
 
     print 'Time to find solution of the board: {0}'.format(end_time) + '.'

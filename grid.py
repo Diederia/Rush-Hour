@@ -33,10 +33,15 @@ class Grid(object):
         return not self.__eq__(other)
 
     def __repr__(self):
-        matrix = '*' * 15 + '\n'
+        counter = 0
+        matrix = '*' * (self.n * 2 + 3) + '\n'
         for row in self.board:
-            matrix += '* {0} *\n'.format(' '.join(row))
-        matrix += '*' * 15 + '\n'
+            if counter == self.exit_y:
+                matrix += '* {0} \n'.format(' '.join(row))
+            else:
+                matrix += '* {0} *\n'.format(' '.join(row))
+            counter +=1
+        matrix += '*' * (self.n * 2 + 3) + '\n'
         return matrix
 
     def solved(self):
@@ -133,7 +138,7 @@ class Grid(object):
                 return vehiclesBocking
             else:
                 if currentPlace != ' ':
-                    vehiclesBocking += 5
+                    vehiclesBocking += 10
 
     def fromGoal(self, move):
         score = 0
@@ -142,4 +147,7 @@ class Grid(object):
             if currentPlace == 'x':
                 return score
             else:
-                score += 3
+                score += 7
+
+    def advancedHeuristic(self, move):
+        score = 0
