@@ -3,7 +3,11 @@ import Queue
 import grid
 import heapq
 
+
 class PriorityQueue:
+    """
+    EXPLANATION
+    """
     def __init__(self):
         self.elements = []
 
@@ -23,7 +27,7 @@ def reconstruct_path(came_from, start, goal):
 
     came_from:
     start:
-    goal: 
+    goal:
 
     Returns: ??
     """
