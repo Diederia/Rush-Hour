@@ -1,3 +1,5 @@
+import cProfile
+
 import sys
 import csv
 import os
@@ -7,6 +9,7 @@ from breadthsearch import *
 from grid import *
 from astar import *
 
+<<<<<<< HEAD
 def load_file(rushhour_file, n):
     """
     Loads in a csv file and places the vehicles on a grid
@@ -16,6 +19,9 @@ def load_file(rushhour_file, n):
 
     Returns: a Grid object representing the chosen board
     """
+=======
+def load_file(csv_file, n):
+>>>>>>> origin/master
     vehicles = []
     with open(csv_file, 'rb') as csv_open_file:
         reader = csv.reader(csv_open_file)
@@ -35,6 +41,7 @@ def load_file(rushhour_file, n):
     return Grid(set(vehicles), begin_board, n)
 
 
+<<<<<<< HEAD
 def solution_steps_bfs(results):
     """
     Generate list of steps to the solution
@@ -43,6 +50,10 @@ def solution_steps_bfs(results):
 
     Returns: an array of moves that lead to the solution
     """
+=======
+def solution_steps_bfs(solution):
+    """Generate list of steps to the solution ."""
+>>>>>>> origin/master
     steps = []
     for i in range(len(solution[0]) - 1):
         board1, board2 = solution[0][i], solution[0][i + 1]
@@ -58,6 +69,7 @@ def solution_steps_bfs(results):
             steps.append('step %d: {0} up'.format(vehicle1.name) %i)
     return steps
 
+<<<<<<< HEAD
 def solution_steps_astar(results):
     """
     Generate list of steps to the solution
@@ -66,6 +78,10 @@ def solution_steps_astar(results):
 
     Returns: an array of moves that lead to the solution
     """
+=======
+def solution_steps_astar(solution):
+    """Generate list of steps to the solution ."""
+>>>>>>> origin/master
     steps = []
     solution1 = solution[1:]
     for i in range(len(solution1) - 1):
@@ -82,6 +98,7 @@ def solution_steps_astar(results):
             steps.append('step %d: {0} up'.format(vehicle1.name) %i)
     return steps
 
+<<<<<<< HEAD
 def visualize_bfs(results):
     """
     Simulation of the different steps on the board that lead to
@@ -91,7 +108,14 @@ def visualize_bfs(results):
 
     Returns: ??
     """
+=======
+def visualize_bfs(solution):
     os.system('clear')
+    print solution[0][0]
+    time.sleep(5)
+>>>>>>> origin/master
+    os.system('clear')
+
     for i in range (len(solution[0]) - 1):
         print (solution[0][i])
         time.sleep(.1)
@@ -99,6 +123,7 @@ def visualize_bfs(results):
     print solution[0][i + 1]
     return 'Rush hour board is Completed! The solution steps are displayed below:'
 
+<<<<<<< HEAD
 def visualize_astar(results):
     """
     Simulation of the different steps on the board that lead to
@@ -108,6 +133,9 @@ def visualize_astar(results):
 
     Returns: ??
     """
+=======
+def visualize_astar(solution):
+>>>>>>> origin/master
     os.system('clear')
     for i in range (len(solution) - 1):
         print (solution[i])
@@ -117,7 +145,7 @@ def visualize_astar(results):
     print len(solution)
     return 'Rush hour board is Completed! The solution steps are displayed below:'
 
-if __name__ == '__main__':
+def main():
     global exit_x
     global exit_y
     global n
@@ -141,13 +169,23 @@ if __name__ == '__main__':
 
     if algorithm == 'astar':
         solution, end_time = a_star_search(game)
-        print visualize_astar(solution)
+        # print visualize_astar(solution)
         print 'Solution steps: {0}'.format(', '.join(solution_steps_astar(solution)))
     elif algorithm == 'bfs':
+<<<<<<< HEAD
         solution, end_time = bfs(game)
         print visualize_bfs(solution)
+=======
+        solution, end_time = bfs(game, 10000)
+        # print visualize_bfs(solution)
+>>>>>>> origin/master
         print 'Solution steps: {0}'.format(', '.join(solution_steps_bfs(solution)))
     else:
         print 'Please enter astar or bfs'
 
     print 'Time to find solution of the board: {0}'.format(end_time) + '.'
+
+if __name__ == '__main__':
+    # main()
+    cProfile.run('main()')
+# 

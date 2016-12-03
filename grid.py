@@ -38,6 +38,7 @@ class Grid(object):
         "What does this do?"
         return not self.__eq__(other)
 
+    # repr eruit wanneer we gaan runnen, bij visualize wel.
     def __repr__(self):
         "Returns a matrix that represents a board with borders around it."
         counter = 0
@@ -50,6 +51,7 @@ class Grid(object):
             counter +=1
         matrix += '*' * (self.n * 2 + 3) + '\n'
         return matrix
+        # return str(self.board)
 
     def solved(self):
         """
@@ -119,6 +121,7 @@ class Grid(object):
                     yield Grid(new_vehicles, new_board, self.n)
 
     def blockerEstimate(self, move):
+<<<<<<< HEAD
         """
         Checks how many vehicles are standing in front of the (red) target car
 
@@ -128,13 +131,16 @@ class Grid(object):
         (red) target car
         """
         vehiclesBocking = 0
+=======
+        score = 0
+>>>>>>> origin/master
         for i in range(self.n):
             currentPlace = self.board[self.exit_y][self.n - (i + 1)]
             if currentPlace == 'x':
-                return vehiclesBocking
+                return score
             else:
                 if currentPlace != ' ':
-                    vehiclesBocking += 10
+                    score += 3
 
     def fromGoal(self, move):
         """
@@ -151,7 +157,52 @@ class Grid(object):
             if currentPlace == 'x':
                 return score
             else:
-                score += 7
+                score += 2
 
     def advancedHeuristic(self, move):
+        """
+        Twee soorten, 1 voor de boards van 6x6 en 1 voor de grotere boards. Dit komt doordat je anders niet meer in de range van het board ben met checken.
+        """
+
         score = 0
+        for i in range(self.n):
+            currentPlace = self.board[self.exit_y][self.n - (i + 1)]
+            if currentPlace != ' ' and currentPlace != 'x':
+                if self.board[self.exit_y - 1][self.n - (i + 1)] == currentPlace:
+                    if self.board[self.exit_y - 2][self.n - (i + 1)] == currentPlace:
+                        if self.board[self.exit_y - 3][self.n - (i + 1)] != ' ':
+                            # print 'test1'
+                            score += 3
+                    elif self.board[self.exit_y - 2][self.n - (i + 1)] != ' ':
+                        # print 'test2'
+                        score += 3
+                elif self.board[self.exit_y - 1][self.n - (i + 1)] != ' ':
+                    # print 'test3'
+                    score += 3
+                if self.board[self.exit_y + 1][self.n - (i + 1)] == currentPlace:
+                    if self.board[self.exit_y + 2][self.n - (i + 1)] == currentPlace:
+                        if self.board[self.exit_y + 3][self.n - (i + 1)] != ' ':
+                            # print 'test4'
+                            score += 3
+                    elif self.board[self.exit_y + 2][self.n - (i + 1)] != ' ':
+                        # print 'test5'
+                        score += 3
+                elif self.board[self.exit_y + 1][self.n - (i + 1)] != ' ':
+                    # print 'test6'
+                    score += 3
+        return score
+        # for i in range(self.n):
+        #     currentPlace = self.board[self.exit_y][self.n - (i + 1)]
+        #     if currentPlace != ' ' and currentPlace != 'x':
+        #         if self.board[self.exit_y - 1][self.n - (i + 1)] == currentPlace:
+        #             if self.board[self.exit_y - 2][self.n - (i + 1)] != currentPlace and self.board[self.exit_y - 2][self.n - (i + 1)] != ' ':
+        #                 score += 100
+        #         elif self.board[self.exit_y - 1][self.n - (i + 1)] != ' ':
+        #             score += 100
+        #         if self.board[self.exit_y + 1][self.n - (i + 1)] == currentPlace:
+        #             if self.board[self.exit_y - 2][self.n - (i + 1)] != currentPlace and self.board[self.exit_y - 2][self.n - (i + 1)] != ' ':
+        #                 score += 100
+        #         elif self.board[self.exit_y + 1][self.n - (i + 1)] != ' ':
+        #             score += 100
+        #
+        # return score

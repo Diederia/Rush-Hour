@@ -16,10 +16,10 @@ class Vehicle(object):
         length: length of the vehicle (2-3)
         """
         self.name = name
-        self.x = int(x)
-        self.y = int(y)
+        self.x = x
+        self.y = y
         self.orientation = orientation
-        self.length = int(length)
+        self.length = length
 
     def __hash__(self):
         "What does this do?"
@@ -37,3 +37,4 @@ class Vehicle(object):
         "Representation of one vehicle"
         return "Vehicle({0}, {1}, {2}, {3}, {4})".format(self.name, int(self.x),
         int(self.y), self.orientation, int(self.length))
+        # return self.name, self.x, self.y, self.orientation, self.length
