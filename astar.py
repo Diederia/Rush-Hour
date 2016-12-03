@@ -1,6 +1,21 @@
 import time
 import Queue
 import grid
+import heapq
+
+class PriorityQueue:
+    def __init__(self):
+        self.elements = []
+
+    def empty(self):
+        return len(self.elements) == 0
+
+    def put(self, item, priority):
+        heapq.heappush(self.elements, (priority, item))
+
+    def get(self):
+        return heapq.heappop(self.elements)[1]
+
 
 def reconstruct_path(came_from, start, goal):
     current = goal
@@ -37,12 +52,13 @@ def a_star_search(game):
             return path, end_time
 
         for move in board.getMoves():
-            new_cost = cost[board] + 5
+            new_cost = cost[board] + 1
             if move not in cost or new_cost < cost[move]:
                 # counter +=1
                 # print counter
                 cost[move] = new_cost
-                priority = new_cost + board.blockerEstimate(move) + board.fromGoal(move)
+                priority = new_cost + board.advancedHeuristic(move) + board.fromGoal(move)
+
                 queue.put(move, priority)
                 came_from[move] = board
 

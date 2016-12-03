@@ -1,3 +1,5 @@
+import cProfile
+
 import sys
 import csv
 import os
@@ -7,7 +9,7 @@ from breadthsearch import *
 from grid import *
 from astar import *
 
-def load_file(rushhour_file, n):
+def load_file(csv_file, n):
     vehicles = []
     with open(csv_file, 'rb') as csv_open_file:
         reader = csv.reader(csv_open_file)
@@ -27,7 +29,7 @@ def load_file(rushhour_file, n):
     return Grid(set(vehicles), begin_board, n)
 
 
-def solution_steps_bfs(results):
+def solution_steps_bfs(solution):
     """Generate list of steps to the solution ."""
     steps = []
     for i in range(len(solution[0]) - 1):
@@ -44,7 +46,7 @@ def solution_steps_bfs(results):
             steps.append('step %d: {0} up'.format(vehicle1.name) %i)
     return steps
 
-def solution_steps_astar(results):
+def solution_steps_astar(solution):
     """Generate list of steps to the solution ."""
     steps = []
     # print solution
@@ -63,8 +65,12 @@ def solution_steps_astar(results):
             steps.append('step %d: {0} up'.format(vehicle1.name) %i)
     return steps
 
-def visualize_bfs(results):
+def visualize_bfs(solution):
     os.system('clear')
+    print solution[0][0]
+    time.sleep(5)
+    os.system('clear')
+
     for i in range (len(solution[0]) - 1):
         print (solution[0][i])
         time.sleep(.1)
@@ -72,7 +78,7 @@ def visualize_bfs(results):
     print solution[0][i + 1]
     return 'Rush hour board is Completed! The solution steps are displayed below:'
 
-def visualize_astar(results):
+def visualize_astar(solution):
     os.system('clear')
     for i in range (len(solution) - 1):
         print (solution[i])
@@ -82,7 +88,7 @@ def visualize_astar(results):
     print len(solution)
     return 'Rush hour board is Completed! The solution steps are displayed below:'
 
-if __name__ == '__main__':
+def main():
     global exit_x
     global exit_y
     global n
@@ -107,13 +113,18 @@ if __name__ == '__main__':
 
     if algorithm == 'astar':
         solution, end_time = a_star_search(game)
-        print visualize_astar(solution)
+        # print visualize_astar(solution)
         print 'Solution steps: {0}'.format(', '.join(solution_steps_astar(solution)))
     elif algorithm == 'bfs':
         solution, end_time = bfs(game, 10000)
-        print visualize_bfs(solution)
+        # print visualize_bfs(solution)
         print 'Solution steps: {0}'.format(', '.join(solution_steps_bfs(solution)))
     else:
         print 'Please enter A* or bfs'
 
     print 'Time to find solution of the board: {0}'.format(end_time) + '.'
+
+if __name__ == '__main__':
+    # main()
+    cProfile.run('main()')
+# 
