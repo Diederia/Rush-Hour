@@ -149,13 +149,12 @@ class Grid(object):
             if currentPlace == 'x':
                 return score
             else:
-                score += 2
+                score += 5
 
     def advancedHeuristic(self, move):
         """
         Twee soorten, 1 voor de boards van 6x6 en 1 voor de grotere boards. Dit komt doordat je anders niet meer in de range van het board ben met checken.
         """
-
         score = 0
         for i in range(self.n):
             currentPlace = self.board[self.exit_y][self.n - (i + 1)]
@@ -164,24 +163,24 @@ class Grid(object):
                     if self.board[self.exit_y - 2][self.n - (i + 1)] == currentPlace:
                         if self.board[self.exit_y - 3][self.n - (i + 1)] != ' ':
                             # print 'test1'
-                            score += 3
+                            score += 1000
                     elif self.board[self.exit_y - 2][self.n - (i + 1)] != ' ':
                         # print 'test2'
-                        score += 3
+                        score += 1000
                 elif self.board[self.exit_y - 1][self.n - (i + 1)] != ' ':
                     # print 'test3'
-                    score += 3
+                    score += 1000
                 if self.board[self.exit_y + 1][self.n - (i + 1)] == currentPlace:
                     if self.board[self.exit_y + 2][self.n - (i + 1)] == currentPlace:
                         if self.board[self.exit_y + 3][self.n - (i + 1)] != ' ':
                             # print 'test4'
-                            score += 3
+                            score += 1000
                     elif self.board[self.exit_y + 2][self.n - (i + 1)] != ' ':
                         # print 'test5'
-                        score += 3
+                        score += 1000
                 elif self.board[self.exit_y + 1][self.n - (i + 1)] != ' ':
                     # print 'test6'
-                    score += 3
+                    score += 1000
         return score
         # for i in range(self.n):
         #     currentPlace = self.board[self.exit_y][self.n - (i + 1)]

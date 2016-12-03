@@ -58,7 +58,7 @@ def a_star_search(game):
                 # print counter
                 cost[move] = new_cost
                 priority = new_cost + board.advancedHeuristic(move) + board.fromGoal(move)
-
+                print priority
                 queue.put(move, priority)
                 came_from[move] = board
 

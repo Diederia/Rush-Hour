@@ -8,6 +8,7 @@ from vehicle import Vehicle
 from breadthsearch import *
 from grid import *
 from astar import *
+from beamsearch import *
 
 def load_file(csv_file, n):
     vehicles = []
@@ -119,6 +120,8 @@ def main():
         solution, end_time = bfs(game, 10000)
         # print visualize_bfs(solution)
         print 'Solution steps: {0}'.format(', '.join(solution_steps_bfs(solution)))
+    elif algorithm == 'beamsearch':
+        solution, end_time = beamSearch(game, 1000)
     else:
         print 'Please enter A* or bfs'
 
@@ -127,4 +130,4 @@ def main():
 if __name__ == '__main__':
     # main()
     cProfile.run('main()')
-# 
+#
