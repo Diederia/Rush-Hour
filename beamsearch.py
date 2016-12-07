@@ -6,6 +6,7 @@ import grid
 
 def beamSearch(game, max_depth):
     """
+    EXPLANATION
 
     Arguments:
         Game : A RushHour board.

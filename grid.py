@@ -72,7 +72,7 @@ class Grid(object):
         for vehicle in self.vehicles:
             # checks if the orientation of the vehicle is horizontal
             if vehicle.orientation == 'h':
-                # LEFT
+                # cheks if the vehicle can move to the left
                 if (vehicle.x - 1 >= 0 and
                     self.board[vehicle.y][vehicle.x - 1] == ' '):
                     new_vehicle = Vehicle(vehicle.name, vehicle.x - 1, vehicle.y, vehicle.orientation, vehicle.length)
@@ -83,7 +83,7 @@ class Grid(object):
                     new_board[vehicle.y][vehicle.x - 1] = vehicle.name
                     new_board[vehicle.y][vehicle.x + vehicle.length - 1] = ' '
                     yield Grid(new_vehicles, new_board, self.n)
-                # RIGHT
+                # checks if the vehicle can move to the right
                 if (vehicle.x + vehicle.length < self.n and
                 self.board[vehicle.y][vehicle.x + vehicle.length] == ' '):
                     new_vehicle = Vehicle(vehicle.name, vehicle.x + 1, vehicle.y, vehicle.orientation, vehicle.length)
@@ -94,9 +94,9 @@ class Grid(object):
                     new_board[vehicle.y][vehicle.x + vehicle.length] = vehicle.name
                     new_board[vehicle.y][vehicle.x] = ' '
                     yield Grid(new_vehicles, new_board, self.n)
-            # checks if the orientation of the vehicle is vertical
+            # if the vehicle isn't horizontal, it is vertical
             else:
-                # UP
+                # checks if the vehicle can go up
                 if (vehicle.y - 1 >= 0 and
                     self.board[vehicle.y - 1][vehicle.x] == ' '):
                     new_vehicle = Vehicle(vehicle.name, vehicle.x, vehicle.y - 1, vehicle.orientation, vehicle.length)
@@ -108,7 +108,7 @@ class Grid(object):
                     new_board[vehicle.y + vehicle.length - 1][vehicle.x] = ' '
                     new_board
                     yield Grid(new_vehicles, new_board, self.n)
-                # DOWN
+                # checks if the vehicle can go down
                 if (vehicle.y + vehicle.length < self.n and
                     self.board[vehicle.y + vehicle.length][vehicle.x] == ' '):
                     new_vehicle = Vehicle(vehicle.name, vehicle.x, vehicle.y + 1, vehicle.orientation, vehicle.length)
@@ -121,7 +121,7 @@ class Grid(object):
                     yield Grid(new_vehicles, new_board, self.n)
 
     def blockerEstimate(self, move):
-<<<<<<< HEAD
+
         """
         Checks how many vehicles are standing in front of the (red) target car
 
@@ -131,9 +131,9 @@ class Grid(object):
         (red) target car
         """
         vehiclesBocking = 0
-=======
         score = 0
->>>>>>> origin/master
+
+        # comment
         for i in range(self.n):
             currentPlace = self.board[self.exit_y][self.n - (i + 1)]
             if currentPlace == 'x':
@@ -152,8 +152,11 @@ class Grid(object):
         target car needs to make before it is at the exit position
         """
         score = 0
+
+        # comment
         for i in range(self.n):
             currentPlace = self.board[self.exit_y][self.n - (i + 1)]
+            # comment
             if currentPlace == 'x':
                 return score
             else:

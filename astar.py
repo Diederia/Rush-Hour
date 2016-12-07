@@ -77,13 +77,12 @@ def a_star_search(game):
 
         # comment
         for move in board.getMoves():
-<<<<<<< HEAD
             new_cost = cost[board] + 5
 
-            #comment
-=======
+            # comment
             new_cost = cost[board] + 1
->>>>>>> origin/master
+
+            # comment
             if move not in cost or new_cost < cost[move]:
                 cost[move] = new_cost
                 priority = new_cost + board.advancedHeuristic(move) + board.fromGoal(move)

@@ -15,7 +15,7 @@ def bfs(game, max_depth):
 
     Returns: a list representing the solution and the end time in seconds it
     took the algorithm to find the solution. If there is no solution found,
-    it will alert the user this board has no solution. 
+    it will alert the user this board has no solution.
     """
     archive = set()
     solution = list()
@@ -45,6 +45,7 @@ def bfs(game, max_depth):
             end = time.clock()
             end_time = end - start
             return solution, end_time
+            
         # comment
         else:
             queue.extendleft((move, new_path) for move in board.getMoves())
