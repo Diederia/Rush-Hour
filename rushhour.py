@@ -162,7 +162,7 @@ def main():
     elif algorithm == 'bfs':
         solution, end_time = bfs(game)
         print visualize_bfs(solution)
-        solution, end_time = bfs(game, 10000)
+        solution, end_time = bfs(game)
         # print visualize_bfs(solution)
         print 'Solution steps: {0}'.format(', '.join(solution_steps_bfs(solution)))
     elif algorithm == 'beamsearch':
