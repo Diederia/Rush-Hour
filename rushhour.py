@@ -77,7 +77,8 @@ def solution_steps_astar(solution):
     results: ??
 
     Returns: an array of moves that lead to the solution
-    """    steps = []
+    """
+    steps = []
     solution1 = solution[1:]
     for i in range(len(solution1) - 1):
         board1, board2 = solution1[i], solution1[i + 1]
