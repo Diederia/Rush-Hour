@@ -27,23 +27,7 @@ def load_file(csv_file, n):
         for row in reader:
             name, x, y, orientation, length = row
             vehicles.append(Vehicle(name, int(x), int(y), orientation, int(length)))
-
-    # make an empty begin board with all spaces, size of n
-    begin_board = [ [' '] * n for _ in range(n)]
-
-    # place every vehicle on the board by looping through the vehicles array
-    for vehicle in vehicles:
-        x, y = vehicle.x, vehicle.y
-        # if orientation is horizontal change the x coordinate
-        if vehicle.orientation == 'h':
-            for i in range(vehicle.length):
-                begin_board[y][x + i] = vehicle.name
-        # if orientation is vertical change the y coordinate
-        else:
-            for i in range(vehicle.length):
-                begin_board[y + i][x] = vehicle.name
-    # place result in a Grid object
-    return Grid(set(vehicles), begin_board, n)
+    return Grid(vehicles, n)
 
 def solution_steps_bfs(solution):
     """
@@ -162,14 +146,12 @@ def main():
         print 'Solution steps: {0}'.format(', '.join(solution_steps_astar(solution)))
     elif algorithm == 'bfs':
         solution, end_time = bfs(game)
-        print visualize_bfs(solution)
-        solution, end_time = bfs(game)
         # print visualize_bfs(solution)
         print 'Solution steps: {0}'.format(', '.join(solution_steps_bfs(solution)))
     elif algorithm == 'beamsearch':
         solution, end_time = beamSearch(game, 1000)
     else:
-        print 'Please enter astar or bfs'
+        print 'Please enter astar, beamsearch or bfs'
 
     print 'Time to find solution of the board: {0}'.format(end_time) + '.'
 

@@ -21,15 +21,6 @@ class Vehicle(object):
         self.orientation = orientation
         self.length = length
 
-    def __hash__(self):
-        return hash(self.__repr__())
-
-    def __eq__(self, other):
-        return self.__dict__ == other.__dict__
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
     def __repr__(self):
         return "Vehicle({0}, {1}, {2}, {3}, {4})".format(self.name, int(self.x),
         int(self.y), self.orientation, int(self.length))

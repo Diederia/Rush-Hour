@@ -38,7 +38,6 @@ def a_star_search(game):
     """
     queue = Queue.PriorityQueue()
     queue.put(game, 0)
-    archive = set()
     came_from = dict()
     cost = dict()
     path = list()
@@ -66,7 +65,7 @@ def a_star_search(game):
             # comment
             if move not in cost or new_cost < cost[move]:
                 cost[move] = new_cost
-                priority = new_cost + board.fromGoal(move) + board.blockerEstimate(move) + board.advancedHeuristic(move)
+                priority = new_cost + board.fromGoal(move) + board.blockerEstimate(move)
                 # print priority
                 queue.put(move, priority)
                 came_from[move] = board
