@@ -3,24 +3,6 @@ import Queue
 import grid
 import heapq
 
-
-class PriorityQueue:
-    """
-    EXPLANATION
-    """
-    def __init__(self):
-        self.elements = []
-
-    def empty(self):
-        return len(self.elements) == 0
-
-    def put(self, item, priority):
-        heapq.heappush(self.elements, (priority, item))
-
-    def get(self):
-        return heapq.heappop(self.elements)[1]
-
-
 def reconstruct_path(came_from, start, goal):
     """
     EXPLANATION
@@ -77,8 +59,6 @@ def a_star_search(game):
 
         # comment
         for move in board.getMoves():
-            new_cost = cost[board] + 5
-
             #comment
             new_cost = cost[board] + 1
 

@@ -33,12 +33,6 @@ def bfs(game, max_depth):
             break
 
         # comment
-        if board in archive:
-            continue
-        else:
-            archive.add(board)
-
-        # comment
         if board.solved():
             solution.append(new_path)
             end = time.clock()
@@ -47,4 +41,6 @@ def bfs(game, max_depth):
         # comment
         else:
             queue.extendleft((move, new_path) for move in board.getMoves())
+
+
     return 'No solution found!'

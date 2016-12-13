@@ -2,6 +2,8 @@ import numpy
 from copy import deepcopy
 from rushhour import *
 
+# Global archive
+archive = set()
 
 class Grid(object):
     """
@@ -25,36 +27,34 @@ class Grid(object):
         else:
             self.exit_y = self.n / 2
 
-    def __hash__(self):
-        "What does this do?"
-        return hash(self.__repr__())
-
-    def __eq__(self, other):
-        return self.vehicles == set(other.vehicles)
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
 
     # repr eruit wanneer we gaan runnen, bij visualize wel.
     def __repr__(self):
         "Returns a matrix that represents a board with borders around it."
-        counter = 0
-        matrix = '*' * (self.n * 2 + 3) + '\n'
-        for row in self.createBoard():
-            if counter == self.exit_y:
-                matrix += '* {0} \n'.format(' '.join(row))
-            else:
-                matrix += '* {0} *\n'.format(' '.join(row))
-            counter +=1
-        matrix += '*' * (self.n * 2 + 3) + '\n'
+        # counter = 0
+        # matrix = '*' * (self.n * 2 + 3) + '\n'
+        # for row in self.createBoard(self.vehicles):
+        #     if counter == self.exit_y:
+        #         matrix += '* {0} \n'.format(' '.join(row))
+        #     else:
+        #         matrix += '* {0} *\n'.format(' '.join(row))
+        #     counter +=1
+        # matrix += '*' * (self.n * 2 + 3) + '\n'
+
+
+        matrix = ''
+        for row in self.createBoard(self.vehicles):
+            matrix += '' .join(row)
+
         return matrix
+
 
         # return str(self.createBoard()):
 
-    def createBoard(self):
+    def createBoard(self, vehicles):
         """Representation of the Rush Hour board as a 2D list of strings"""
         board = [ [' '] * self.n for _ in range(self.n)]
-        for vehicle in self.vehicles:
+        for vehicle in vehicles:
             x, y = vehicle.x, vehicle.y
             if vehicle.orientation == 'h':
                 for i in range(vehicle.length):
@@ -80,7 +80,7 @@ class Grid(object):
 
         Returns: iterator of next possible moves.
         """
-        board = self.createBoard()
+        board = self.createBoard(self.vehicles)
         # iterates over all the vehicles on the board
         for vehicle in self.vehicles:
             # checks if the orientation of the vehicle is horizontal
@@ -91,15 +91,16 @@ class Grid(object):
                     new_vehicles = self.vehicles.copy()
                     new_vehicles.remove(vehicle)
                     new_vehicles.add(new_vehicle)
-                    yield Grid(new_vehicles, self.n)
+                    if self.notInArchive(new_vehicles):
+                        yield Grid(new_vehicles, self.n)
                 # RIGHT
                 if vehicle.x + vehicle.length < self.n and board[vehicle.y][vehicle.x + vehicle.length] == ' ':
                     new_vehicle = Vehicle(vehicle.name, vehicle.x + 1, vehicle.y, vehicle.orientation, vehicle.length)
                     new_vehicles = self.vehicles.copy()
                     new_vehicles.remove(vehicle)
                     new_vehicles.add(new_vehicle)
-                    yield Grid(new_vehicles, self.n)
-            # checks if the orientation of the vehicle is vertical
+                    if self.notInArchive(new_vehicles):
+                        yield Grid(new_vehicles, self.n)            # checks if the orientation of the vehicle is vertical
             else:
                 # UP
                 if vehicle.y - 1 >= 0 and board[vehicle.y - 1][vehicle.x] == ' ':
@@ -107,14 +108,27 @@ class Grid(object):
                     new_vehicles = self.vehicles.copy()
                     new_vehicles.remove(vehicle)
                     new_vehicles.add(new_vehicle)
-                    yield Grid(new_vehicles, self.n)
-                # DOWN
+                    if self.notInArchive(new_vehicles):
+                        yield Grid(new_vehicles, self.n)                # DOWN
                 if vehicle.y + vehicle.length < self.n and board[vehicle.y + vehicle.length][vehicle.x] == ' ':
                     new_vehicle = Vehicle(vehicle.name, vehicle.x, vehicle.y + 1, vehicle.orientation, vehicle.length)
                     new_vehicles = self.vehicles.copy()
                     new_vehicles.remove(vehicle)
                     new_vehicles.add(new_vehicle)
-                    yield Grid(new_vehicles, self.n)
+                    if self.notInArchive(new_vehicles):
+                        yield Grid(new_vehicles, self.n)
+
+    def notInArchive(self, new_vehicles):
+        matrix = ''
+        for row in self.createBoard(new_vehicles):
+            matrix += ''.join(row)
+
+        if matrix in archive:
+            return False
+        else:
+            archive.add(matrix)
+            return True
+
 
     def blockerEstimate(self, move):
         """
@@ -168,24 +182,24 @@ class Grid(object):
                     if board[self.exit_y - 2][self.n - (i + 1)] == currentPlace:
                         if board[self.exit_y - 3][self.n - (i + 1)] != ' ':
                             # print 'test1'
-                            score += 1000
+                            score += 1
                     elif board[self.exit_y - 2][self.n - (i + 1)] != ' ':
                         # print 'test2'
-                        score += 1000
+                        score += 1
                 elif board[self.exit_y - 1][self.n - (i + 1)] != ' ':
                     # print 'test3'
-                    score += 1000
+                    score += 1
                 if board[self.exit_y + 1][self.n - (i + 1)] == currentPlace:
                     if board[self.exit_y + 2][self.n - (i + 1)] == currentPlace:
                         if board[self.exit_y + 3][self.n - (i + 1)] != ' ':
                             # print 'test4'
-                            score += 1000
+                            score += 1
                     elif board[self.exit_y + 2][self.n - (i + 1)] != ' ':
                         # print 'test5'
-                        score += 1000
+                        score += 1
                 elif board[self.exit_y + 1][self.n - (i + 1)] != ' ':
                     # print 'test6'
-                    score += 1000
+                    score += 1
         return score
         # for i in range(self.n):
         #     currentPlace = self.board[self.exit_y][self.n - (i + 1)]

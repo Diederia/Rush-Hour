@@ -12,12 +12,13 @@ from beamsearch import *
 
 def load_file(csv_file):
     """
-    Loads in a csv file and places the vehicles on a grid
+    Loads in a csv file with places of the vehicles on a grid and the dimension
+    of the board (n).
 
-    rushhour_file: one of the seven possible board configurations
-    n: int representing the size (length and width) of the chosen board
+    csv_file: one of the seven possible board configurations.
+    n: int representing the size (length and width) of the chosen board.
 
-    Returns: a Grid object representing the chosen board
+    Returns: a Grid object representing the chosen board.
     """
 
     vehicles = []
@@ -33,11 +34,11 @@ def load_file(csv_file):
 
 def solution_steps(solution):
     """
-    Generate list of steps to the solution
+    Generate list of steps to the solution.
 
     results: ??
 
-    Returns: an array of moves that lead to the solution
+    Returns: an array of moves that lead to the solution.
     """
 
     steps = []
@@ -76,10 +77,6 @@ def visualize(solution):
     return 'Rush hour board is Completed! The solution steps are displayed below:'
 
 def main():
-    global exit_x
-    global exit_y
-    global n
-
     if len(sys.argv) != 3:
         print "Usage example: python Boards/board.csv algorithm filename.py"
 
@@ -90,13 +87,12 @@ def main():
 
     if algorithm == 'astar':
         path, end_time = a_star_search(game)
-
         solution = [path[1:]]
-        print visualize(solution)
+        # print visualize(solution)
         print 'Solution steps: {0}'.format(', '.join(solution_steps(solution)))
     elif algorithm == 'bfs':
         solution, end_time = bfs(game, 10000)
-        print visualize(solution)
+        # print visualize(solution)
         print 'Solution steps: {0}'.format(', '.join(solution_steps(solution)))
     elif algorithm == 'beamsearch':
         solution, end_time = beamSearch(game, 1000)
@@ -108,4 +104,3 @@ def main():
 if __name__ == '__main__':
     # main()
     cProfile.run('main()')
-#
