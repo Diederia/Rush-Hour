@@ -10,7 +10,7 @@ from grid import *
 from astar import *
 from beamsearch import *
 
-def load_file(csv_file, n):
+def load_file(csv_file):
     """
     Loads in a csv file and places the vehicles on a grid
 
@@ -24,8 +24,11 @@ def load_file(csv_file, n):
     with open(csv_file, 'rb') as csv_open_file:
         reader = csv.reader(csv_open_file)
         for row in reader:
-            name, x, y, orientation, length = row
-            vehicles.append(Vehicle(name, int(x), int(y), orientation, int(length)))
+            if len(row) != 1:
+                name, x, y, orientation, length = row
+                vehicles.append(Vehicle(name, int(x), int(y), orientation, int(length)))
+            else:
+                n = int(row[0])
     return Grid(set(vehicles), n)
 
 def solution_steps(solution):
@@ -83,20 +86,11 @@ def main():
     csv_file = sys.argv[1]
     algorithm = sys.argv[2]
 
-    if (csv_file == 'Boards/board1.csv' or csv_file == 'Boards/board2.csv'
-        or csv_file == 'Boards/board3.csv'):
-        n = 6
-    elif (csv_file == 'Boards/board4.csv' or csv_file == 'Boards/board5.csv'
-        or csv_file == 'Boards/board6.csv'):
-        n = 9
-    else:
-        n = 12
-
-    game = load_file(csv_file, n)
+    game = load_file(csv_file)
 
     if algorithm == 'astar':
         path, end_time = a_star_search(game)
-        
+
         solution = [path[1:]]
         print visualize(solution)
         print 'Solution steps: {0}'.format(', '.join(solution_steps(solution)))
