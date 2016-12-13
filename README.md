@@ -1,16 +1,15 @@
 # Rush Hour solver
-This is a program in python using different algorithms to achieve
-a solution for 7 rush hour boards.
+(project description goes here)
 
 ## Running the program
 Running the code with command line in the terminal: python Boards/board.csv algorithm rushhour.py
-* Possible algorithms: astar, beamsearch or bfs
+* Possible algorithms: astar or bfs
 * Possible boards: board1 till board7
 
 Example if you would like to run the 5th board with an astar algorithm
 
 ```
-python rushhour.py Boards/board5.csv astar
+python Boards/board5.csv astar rushhour.py
 ```
 
 ## Built With

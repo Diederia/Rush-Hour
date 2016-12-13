@@ -4,6 +4,23 @@ import grid
 import heapq
 
 
+class PriorityQueue:
+    """
+    EXPLANATION
+    """
+    def __init__(self):
+        self.elements = []
+
+    def empty(self):
+        return len(self.elements) == 0
+
+    def put(self, item, priority):
+        heapq.heappush(self.elements, (priority, item))
+
+    def get(self):
+        return heapq.heappop(self.elements)[1]
+
+
 def reconstruct_path(came_from, start, goal):
     """
     EXPLANATION
@@ -38,6 +55,7 @@ def a_star_search(game):
     """
     queue = Queue.PriorityQueue()
     queue.put(game, 0)
+    archive = set()
     came_from = dict()
     cost = dict()
     path = list()
@@ -59,14 +77,14 @@ def a_star_search(game):
 
         # comment
         for move in board.getMoves():
-            # comment
+            new_cost = cost[board] + 5
+
+            #comment
             new_cost = cost[board] + 1
 
-            # comment
             if move not in cost or new_cost < cost[move]:
                 cost[move] = new_cost
-                priority = new_cost + board.fromGoal(move) + board.blockerEstimate(move)
-                # print priority
+                priority = new_cost + board.advancedHeuristic(move) + board.fromGoal(move)
                 queue.put(move, priority)
                 came_from[move] = board
 
@@ -75,4 +93,3 @@ def a_star_search(game):
 """
 http://www.redblobgames.com/pathfinding/a-star/implementation.html
 """
-# we could add board.advancedHeuristic(move) as a heuristic

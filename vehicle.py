@@ -1,8 +1,8 @@
+
+
 class Vehicle(object):
     """
     A configuration of a single vehicle
-
-    Cited from abahgat at http://stackoverflow.com/questions/4005318/how-to-implement-a-good-hash-function-in-python
     """
 
     def __init__(self, name, x, y, orientation, length):
@@ -21,7 +21,20 @@ class Vehicle(object):
         self.orientation = orientation
         self.length = length
 
+    def __hash__(self):
+        "What does this do?"
+        return hash(self.__repr__())
+
+    def __eq__(self, other):
+        "What does this do?"
+        return self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        "What does this do?"
+        return not self.__eq__(other)
+
     def __repr__(self):
-        return "Vehicle({0}, {1}, {2}, {3}, {4})".format(self.name, int(self.x),
-        int(self.y), self.orientation, int(self.length))
+        "Representation of one vehicle"
+        return "Vehicle({0}, {1}, {2}, {3}, {4})".format(self.name, self.x,
+        self.y, self.orientation, self.length)
         # return self.name, self.x, self.y, self.orientation, self.length

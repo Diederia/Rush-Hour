@@ -1,5 +1,5 @@
 import numpy
-import copy
+from copy import deepcopy
 from rushhour import *
 
 
@@ -18,21 +18,29 @@ class Grid(object):
         """
         self.n = n
         self.vehicles = vehicles
-        begin_board = [ [' '] * n for _ in range(n)]
-        self.board = begin_board
 
-        self.exit_x = self.n - 1
+        self.exit_x = self.n - 2
         if n != 9:
             self.exit_y = self.n / 2 - 1
         else:
             self.exit_y = self.n / 2
+
+    def __hash__(self):
+        "What does this do?"
+        return hash(self.__repr__())
+
+    def __eq__(self, other):
+        return self.vehicles == set(other.vehicles)
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
     # repr eruit wanneer we gaan runnen, bij visualize wel.
     def __repr__(self):
         "Returns a matrix that represents a board with borders around it."
         counter = 0
         matrix = '*' * (self.n * 2 + 3) + '\n'
-        for row in self.board:
+        for row in self.createBoard():
             if counter == self.exit_y:
                 matrix += '* {0} \n'.format(' '.join(row))
             else:
@@ -40,16 +48,31 @@ class Grid(object):
             counter +=1
         matrix += '*' * (self.n * 2 + 3) + '\n'
         return matrix
-        # return str(self.board)
+
+        # return str(self.createBoard()):
+
+    def createBoard(self):
+        """Representation of the Rush Hour board as a 2D list of strings"""
+        board = [ [' '] * self.n for _ in range(self.n)]
+        for vehicle in self.vehicles:
+            x, y = vehicle.x, vehicle.y
+            if vehicle.orientation == 'h':
+                for i in range(vehicle.length):
+                    board[y][x + i] = vehicle.name
+            else:
+                for i in range(vehicle.length):
+                    board[y + i][x] = vehicle.name
+        return board
 
     def solved(self):
-        """
-        Returns True if the board is in a solved state, returns False otherwise.
-        """
-        if self.board[self.exit_y][self.exit_x] == 'x':
-            return True
-        else:
-            return False
+        """Returns true if the board is in a solved state."""
+        for vehicle in self.vehicles:
+            if vehicle.name == 'x':
+                if vehicle.x == self.exit_x:
+                    print"test4"
+                    return True
+                else:
+                    return False
 
     def getMoves(self):
         """
@@ -57,47 +80,43 @@ class Grid(object):
 
         Returns: iterator of next possible moves.
         """
+        board = self.createBoard()
         # iterates over all the vehicles on the board
         for vehicle in self.vehicles:
             # checks if the orientation of the vehicle is horizontal
             if vehicle.orientation == 'h':
-                # cheks if the vehicle can move to the left
-                if (vehicle.x - 1 >= 0 and
-                    self.board[vehicle.y][vehicle.x - 1] == ' '):
+                # LEFT
+                if vehicle.x - 1 >= 0 and board[vehicle.y][vehicle.x - 1] == ' ':
                     new_vehicle = Vehicle(vehicle.name, vehicle.x - 1, vehicle.y, vehicle.orientation, vehicle.length)
-                    new_vehicles = copy.copy(self.vehicles)
+                    new_vehicles = self.vehicles.copy()
                     new_vehicles.remove(vehicle)
-                    new_vehicles.append(new_vehicle)
+                    new_vehicles.add(new_vehicle)
                     yield Grid(new_vehicles, self.n)
-                # checks if the vehicle can move to the right
-                if (vehicle.x + vehicle.length < self.n and
-                self.board[vehicle.y][vehicle.x + vehicle.length] == ' '):
+                # RIGHT
+                if vehicle.x + vehicle.length < self.n and board[vehicle.y][vehicle.x + vehicle.length] == ' ':
                     new_vehicle = Vehicle(vehicle.name, vehicle.x + 1, vehicle.y, vehicle.orientation, vehicle.length)
-                    new_vehicles = copy.copy(self.vehicles)
+                    new_vehicles = self.vehicles.copy()
                     new_vehicles.remove(vehicle)
-                    new_vehicles.append(new_vehicle)
+                    new_vehicles.add(new_vehicle)
                     yield Grid(new_vehicles, self.n)
-            # if the vehicle isn't horizontal, it is vertical
+            # checks if the orientation of the vehicle is vertical
             else:
-                # checks if the vehicle can go up
-                if (vehicle.y - 1 >= 0 and
-                    self.board[vehicle.y - 1][vehicle.x] == ' '):
+                # UP
+                if vehicle.y - 1 >= 0 and board[vehicle.y - 1][vehicle.x] == ' ':
                     new_vehicle = Vehicle(vehicle.name, vehicle.x, vehicle.y - 1, vehicle.orientation, vehicle.length)
-                    new_vehicles = copy.copy(self.vehicles)
+                    new_vehicles = self.vehicles.copy()
                     new_vehicles.remove(vehicle)
-                    new_vehicles.append(new_vehicle)
+                    new_vehicles.add(new_vehicle)
                     yield Grid(new_vehicles, self.n)
-                # checks if the vehicle can go down
-                if (vehicle.y + vehicle.length < self.n and
-                    self.board[vehicle.y + vehicle.length][vehicle.x] == ' '):
+                # DOWN
+                if vehicle.y + vehicle.length < self.n and board[vehicle.y + vehicle.length][vehicle.x] == ' ':
                     new_vehicle = Vehicle(vehicle.name, vehicle.x, vehicle.y + 1, vehicle.orientation, vehicle.length)
-                    new_vehicles = copy.copy(self.vehicles)
+                    new_vehicles = self.vehicles.copy()
                     new_vehicles.remove(vehicle)
-                    new_vehicles.append(new_vehicle)
+                    new_vehicles.add(new_vehicle)
                     yield Grid(new_vehicles, self.n)
 
     def blockerEstimate(self, move):
-
         """
         Checks how many vehicles are standing in front of the (red) target car
 
@@ -106,17 +125,17 @@ class Grid(object):
         Returns: an integer that represents the amount of vehicles blocking the
         (red) target car
         """
+
+        board = self.createBoard()
         vehiclesBocking = 0
         score = 0
-
-        # comment
         for i in range(self.n):
-            currentPlace = self.board[self.exit_y][self.n - (i + 1)]
+            currentPlace = board[self.exit_y][self.n - (i + 1)]
             if currentPlace == 'x':
                 return score
             else:
                 if currentPlace != ' ':
-                    score += 2
+                    score += 3
 
     def fromGoal(self, move):
         """
@@ -127,62 +146,59 @@ class Grid(object):
         Returns: an integer that represents the amount of moves the (red)
         target car needs to make before it is at the exit position
         """
+        board = self.createBoard()
         score = 0
-
-        # comment
         for i in range(self.n):
-            currentPlace = self.board[self.exit_y][self.n - (i + 1)]
-            # comment
+            currentPlace = board[self.exit_y][self.n - (i + 1)]
             if currentPlace == 'x':
                 return score
             else:
-                score += 1
+                score += 5
 
-    # def advancedHeuristic(self, move):
-    #     """
-    #     Twee soorten, een voor de boards van 6x6 en een voor de grotere boards.
-    #     Dit komt doordat je anders niet meer in de range van
-    #     het board bent met checken.
-    #     """
-    #     score = 0
-    #     for i in range(self.n):
-    #         currentPlace = self.board[self.exit_y][self.n - (i + 1)]
-    #         if currentPlace != ' ' and currentPlace != 'x':
-    #             if self.board[self.exit_y - 1][self.n - (i + 1)] == currentPlace:
-    #                 if self.board[self.exit_y - 2][self.n - (i + 1)] == currentPlace:
-    #                     if self.board[self.exit_y - 3][self.n - (i + 1)] != ' ':
-    #                         # print 'test1'
-    #                         score += 1
-    #                 elif self.board[self.exit_y - 2][self.n - (i + 1)] != ' ':
-    #                     # print 'test2'
-    #                     score += 1
-    #             elif self.board[self.exit_y - 1][self.n - (i + 1)] != ' ':
-    #                 # print 'test3'
-    #                 score += 1
-    #             if self.board[self.exit_y + 1][self.n - (i + 1)] == currentPlace:
-    #                 if self.board[self.exit_y + 2][self.n - (i + 1)] == currentPlace:
-    #                     if self.board[self.exit_y + 3][self.n - (i + 1)] != ' ':
-    #                         # print 'test4'
-    #                         score += 1
-    #                 elif self.board[self.exit_y + 2][self.n - (i + 1)] != ' ':
-    #                     # print 'test5'
-    #                     score += 1
-    #             elif self.board[self.exit_y + 1][self.n - (i + 1)] != ' ':
-    #                 # print 'test6'
-    #                 score += 1
-    #     return score
-    #     # for i in range(self.n):
-    #     #     currentPlace = self.board[self.exit_y][self.n - (i + 1)]
-    #     #     if currentPlace != ' ' and currentPlace != 'x':
-    #     #         if self.board[self.exit_y - 1][self.n - (i + 1)] == currentPlace:
-    #     #             if self.board[self.exit_y - 2][self.n - (i + 1)] != currentPlace and self.board[self.exit_y - 2][self.n - (i + 1)] != ' ':
-    #     #                 score += 100
-    #     #         elif self.board[self.exit_y - 1][self.n - (i + 1)] != ' ':
-    #     #             score += 100
-    #     #         if self.board[self.exit_y + 1][self.n - (i + 1)] == currentPlace:
-    #     #             if self.board[self.exit_y - 2][self.n - (i + 1)] != currentPlace and self.board[self.exit_y - 2][self.n - (i + 1)] != ' ':
-    #     #                 score += 100
-    #     #         elif self.board[self.exit_y + 1][self.n - (i + 1)] != ' ':
-    #     #             score += 100
-    #     #
-    #     # return score
+    def advancedHeuristic(self, move):
+        """
+        Twee soorten, 1 voor de boards van 6x6 en 1 voor de grotere boards. Dit komt doordat je anders niet meer in de range van het board ben met checken.
+        """
+        board = self.createBoard()
+        score = 0
+        for i in range(self.n):
+            currentPlace = board[self.exit_y][self.n - (i + 1)]
+            if currentPlace != ' ' and currentPlace != 'x':
+                if board[self.exit_y - 1][self.n - (i + 1)] == currentPlace:
+                    if board[self.exit_y - 2][self.n - (i + 1)] == currentPlace:
+                        if board[self.exit_y - 3][self.n - (i + 1)] != ' ':
+                            # print 'test1'
+                            score += 1000
+                    elif board[self.exit_y - 2][self.n - (i + 1)] != ' ':
+                        # print 'test2'
+                        score += 1000
+                elif board[self.exit_y - 1][self.n - (i + 1)] != ' ':
+                    # print 'test3'
+                    score += 1000
+                if board[self.exit_y + 1][self.n - (i + 1)] == currentPlace:
+                    if board[self.exit_y + 2][self.n - (i + 1)] == currentPlace:
+                        if board[self.exit_y + 3][self.n - (i + 1)] != ' ':
+                            # print 'test4'
+                            score += 1000
+                    elif board[self.exit_y + 2][self.n - (i + 1)] != ' ':
+                        # print 'test5'
+                        score += 1000
+                elif board[self.exit_y + 1][self.n - (i + 1)] != ' ':
+                    # print 'test6'
+                    score += 1000
+        return score
+        # for i in range(self.n):
+        #     currentPlace = self.board[self.exit_y][self.n - (i + 1)]
+        #     if currentPlace != ' ' and currentPlace != 'x':
+        #         if self.board[self.exit_y - 1][self.n - (i + 1)] == currentPlace:
+        #             if self.board[self.exit_y - 2][self.n - (i + 1)] != currentPlace and self.board[self.exit_y - 2][self.n - (i + 1)] != ' ':
+        #                 score += 100
+        #         elif self.board[self.exit_y - 1][self.n - (i + 1)] != ' ':
+        #             score += 100
+        #         if self.board[self.exit_y + 1][self.n - (i + 1)] == currentPlace:
+        #             if self.board[self.exit_y - 2][self.n - (i + 1)] != currentPlace and self.board[self.exit_y - 2][self.n - (i + 1)] != ' ':
+        #                 score += 100
+        #         elif self.board[self.exit_y + 1][self.n - (i + 1)] != ' ':
+        #             score += 100
+        #
+        # return score

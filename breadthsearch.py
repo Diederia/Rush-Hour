@@ -4,7 +4,7 @@ import time
 from collections import deque
 import grid
 
-def bfs(game, max_depth = 1000):
+def bfs(game, max_depth):
     """
     This function starts an breadth first search algorithm finding the optimal
     solution for the rush hour board given to it.
@@ -23,30 +23,28 @@ def bfs(game, max_depth = 1000):
     queue.appendleft((game, tuple()))
     start = time.clock()
 
-    # while the queue is not empty, get a child from the queue
+    # comment
     while len(queue) != 0:
         board, path = queue.pop()
         new_path = path + tuple([board])
 
-        #
+        # comment
         if len(new_path) >= max_depth:
             break
 
-        # check if the board is in archive, to avoid infinite loops
+        # comment
         if board in archive:
             continue
         else:
             archive.add(board)
 
-        # check if the child is a solved board
+        # comment
         if board.solved():
-            print new_path
             solution.append(new_path)
             end = time.clock()
             end_time = end - start
             return solution, end_time
-
-        # if it is not solved, extend the queue with all the childs of current board
+        # comment
         else:
             queue.extendleft((move, new_path) for move in board.getMoves())
     return 'No solution found!'
