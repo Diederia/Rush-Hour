@@ -130,89 +130,98 @@ class Grid(object):
             return True
 
 
+    
+
     def blockerEstimate(self, move):
         """
         Checks how many vehicles are standing in front of the (red) target car
 
-        move: ??
+        move: Grid object of the current situation
 
         Returns: an integer that represents the amount of vehicles blocking the
         (red) target car
         """
-
-        board = self.createBoard()
-        vehiclesBocking = 0
+        new_vehicles = move.vehicles
+        board = self.createBoard(new_vehicles)
         score = 0
         for i in range(self.n):
             currentPlace = board[self.exit_y][self.n - (i + 1)]
-            if currentPlace == 'x':
-                return score
-            else:
+            if currentPlace != 'x':
                 if currentPlace != ' ':
-                    score += 3
+                    score += 2
+            else:
+                return score
+
 
     def fromGoal(self, move):
         """
         Checks how many steps away the (red) target car is from the exit
 
-        move: ??
+        move: Grid object of the current situation
 
         Returns: an integer that represents the amount of moves the (red)
         target car needs to make before it is at the exit position
         """
-        board = self.createBoard()
+        new_vehicles = move.vehicles
+        board = self.createBoard(new_vehicles)
         score = 0
         for i in range(self.n):
             currentPlace = board[self.exit_y][self.n - (i + 1)]
             if currentPlace == 'x':
                 return score
             else:
-                score += 5
+                score += 1
 
     def advancedHeuristic(self, move):
         """
-        Twee soorten, 1 voor de boards van 6x6 en 1 voor de grotere boards. Dit komt doordat je anders niet meer in de range van het board ben met checken.
+        Twee soorten, 1 voor de boards van 6x6 en 1 voor de grotere boards.
+        Dit komt doordat je anders niet meer in de range van het board ben met checken.
+
+        move: Grid object of the current situation
+
+        Returns: an integer
         """
-        board = self.createBoard()
+        new_vehicles = move.vehicles
+        board = self.createBoard(new_vehicles)
         score = 0
-        for i in range(self.n):
-            currentPlace = board[self.exit_y][self.n - (i + 1)]
+#         for i in range(self.n):
+#             currentPlace = board[self.exit_y][self.n - (i + 1)]
+#             if currentPlace != ' ' and currentPlace != 'x':
+#                 if board[self.exit_y - 1][self.n - (i + 1)] == currentPlace:
+#                     if board[self.exit_y - 2][self.n - (i + 1)] == currentPlace:
+#                         if board[self.exit_y - 3][self.n - (i + 1)] != ' ':
+#                             # print 'test1'
+#                             score += 1
+#                     elif board[self.exit_y - 2][self.n - (i + 1)] != ' ':
+#                         # print 'test2'
+#                         score += 1
+#                 elif board[self.exit_y - 1][self.n - (i + 1)] != ' ':
+#                     # print 'test3'
+#                     score += 1
+#                 if board[self.exit_y + 1][self.n - (i + 1)] == currentPlace:
+#                     if board[self.exit_y + 2][self.n - (i + 1)] == currentPlace:
+#                         if board[self.exit_y + 3][self.n - (i + 1)] != ' ':
+#                             # print 'test4'
+#                             score += 1
+#                     elif board[self.exit_y + 2][self.n - (i + 1)] != ' ':
+#                         # print 'test5'
+#                         score += 1
+#                 elif board[self.exit_y + 1][self.n - (i + 1)] != ' ':
+#                     # print 'test6'
+#                     score += 1
+#         return score
+            for i in range(self.n):
+            currentPlace = self.board[self.exit_y][self.n - (i + 1)]
             if currentPlace != ' ' and currentPlace != 'x':
-                if board[self.exit_y - 1][self.n - (i + 1)] == currentPlace:
-                    if board[self.exit_y - 2][self.n - (i + 1)] == currentPlace:
-                        if board[self.exit_y - 3][self.n - (i + 1)] != ' ':
-                            # print 'test1'
-                            score += 1
-                    elif board[self.exit_y - 2][self.n - (i + 1)] != ' ':
-                        # print 'test2'
-                        score += 1
-                elif board[self.exit_y - 1][self.n - (i + 1)] != ' ':
-                    # print 'test3'
-                    score += 1
-                if board[self.exit_y + 1][self.n - (i + 1)] == currentPlace:
-                    if board[self.exit_y + 2][self.n - (i + 1)] == currentPlace:
-                        if board[self.exit_y + 3][self.n - (i + 1)] != ' ':
-                            # print 'test4'
-                            score += 1
-                    elif board[self.exit_y + 2][self.n - (i + 1)] != ' ':
-                        # print 'test5'
-                        score += 1
-                elif board[self.exit_y + 1][self.n - (i + 1)] != ' ':
-                    # print 'test6'
-                    score += 1
+                if self.board[self.exit_y - 1][self.n - (i + 1)] == currentPlace:
+                    if self.board[self.exit_y - 2][self.n - (i + 1)] != currentPlace and self.board[self.exit_y - 2][self.n - (i + 1)] != ' ':
+                        score += 100
+                elif self.board[self.exit_y - 1][self.n - (i + 1)] != ' ':
+                    score += 100
+                if self.board[self.exit_y + 1][self.n - (i + 1)] == currentPlace:
+                    if self.board[self.exit_y - 2][self.n - (i + 1)] != currentPlace and self.board[self.exit_y - 2][self.n - (i + 1)] != ' ':
+                        score += 100
+                elif self.board[self.exit_y + 1][self.n - (i + 1)] != ' ':
+                    score += 100
+        
         return score
-        # for i in range(self.n):
-        #     currentPlace = self.board[self.exit_y][self.n - (i + 1)]
-        #     if currentPlace != ' ' and currentPlace != 'x':
-        #         if self.board[self.exit_y - 1][self.n - (i + 1)] == currentPlace:
-        #             if self.board[self.exit_y - 2][self.n - (i + 1)] != currentPlace and self.board[self.exit_y - 2][self.n - (i + 1)] != ' ':
-        #                 score += 100
-        #         elif self.board[self.exit_y - 1][self.n - (i + 1)] != ' ':
-        #             score += 100
-        #         if self.board[self.exit_y + 1][self.n - (i + 1)] == currentPlace:
-        #             if self.board[self.exit_y - 2][self.n - (i + 1)] != currentPlace and self.board[self.exit_y - 2][self.n - (i + 1)] != ' ':
-        #                 score += 100
-        #         elif self.board[self.exit_y + 1][self.n - (i + 1)] != ' ':
-        #             score += 100
-        #
-        # return score
