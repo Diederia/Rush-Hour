@@ -1,5 +1,5 @@
 # Rush Hour solver
-(project description goes here)
+This is a rush hour solver written in python. It is tested using seven different begin configurations of the game with three different board sizes (6x6, 9x9 and 12x12). 
 
 ## Running the program
 Running the code with command line in the terminal: python Boards/board.csv algorithm rushhour.py
