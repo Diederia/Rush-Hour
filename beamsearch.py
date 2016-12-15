@@ -21,6 +21,7 @@ def beamSearch(game, max_depth):
         board, path = queue.pop()
         new_path = path + tuple([board])
 
+
         if len(new_path)%5 == 0:
             for moves in board.getMoves():
                 cost = 10000

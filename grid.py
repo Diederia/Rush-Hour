@@ -123,7 +123,7 @@ class Grid(object):
         return moves
 
     def notInArchive(self, new_vehicles):
-        print len(archive)
+        # print len(archive)
         matrix = ''
         for row in self.createBoard(new_vehicles):
             matrix += ''.join(row)

@@ -29,7 +29,10 @@ def bfs(game, max_depth):
         new_path = path + tuple([board])
 
         # comment
-        if len(new_path) >= max_depth:
+        depth = len(new_path)
+        print"Depth:"
+        print depth
+        if depth >= max_depth:
             break
 
         # comment
