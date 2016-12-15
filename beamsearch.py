@@ -13,7 +13,6 @@ def beamSearch(game, max_depth):
     Keyword Arguments:
         max_depth: 1000
     """
-    archive = set()
     solution = list()
     queue = deque()
     queue.appendleft((game, tuple()))
@@ -31,11 +30,6 @@ def beamSearch(game, max_depth):
                     cost = new_cost
             board = new_board
 
-        if board in archive:
-            continue
-        else:
-            archive.add(board)
-
         if board.solved():
             solution.append(new_path)
             end = time.clock()
@@ -43,3 +37,6 @@ def beamSearch(game, max_depth):
             return solution, end_time
         else:
             queue.extendleft((move, new_path) for move in board.getMoves())
+
+    end_time = 0
+    return solution, end_time

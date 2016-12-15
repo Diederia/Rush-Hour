@@ -80,6 +80,7 @@ class Grid(object):
 
         Returns: iterator of next possible moves.
         """
+        moves = []
         board = self.createBoard(self.vehicles)
         # iterates over all the vehicles on the board
         for vehicle in self.vehicles:
@@ -92,7 +93,7 @@ class Grid(object):
                     new_vehicles.remove(vehicle)
                     new_vehicles.add(new_vehicle)
                     if self.notInArchive(new_vehicles):
-                        yield Grid(new_vehicles, self.n)
+                        moves.append(Grid(new_vehicles, self.n))
                 # RIGHT
                 if vehicle.x + vehicle.length < self.n and board[vehicle.y][vehicle.x + vehicle.length] == ' ':
                     new_vehicle = Vehicle(vehicle.name, vehicle.x + 1, vehicle.y, vehicle.orientation, vehicle.length)
@@ -100,7 +101,8 @@ class Grid(object):
                     new_vehicles.remove(vehicle)
                     new_vehicles.add(new_vehicle)
                     if self.notInArchive(new_vehicles):
-                        yield Grid(new_vehicles, self.n)            # checks if the orientation of the vehicle is vertical
+                        moves.append(Grid(new_vehicles, self.n))
+            # checks if the orientation of the vehicle is vertical
             else:
                 # UP
                 if vehicle.y - 1 >= 0 and board[vehicle.y - 1][vehicle.x] == ' ':
@@ -109,14 +111,16 @@ class Grid(object):
                     new_vehicles.remove(vehicle)
                     new_vehicles.add(new_vehicle)
                     if self.notInArchive(new_vehicles):
-                        yield Grid(new_vehicles, self.n)                # DOWN
+                        moves.append(Grid(new_vehicles, self.n))
+                # DOWN
                 if vehicle.y + vehicle.length < self.n and board[vehicle.y + vehicle.length][vehicle.x] == ' ':
                     new_vehicle = Vehicle(vehicle.name, vehicle.x, vehicle.y + 1, vehicle.orientation, vehicle.length)
                     new_vehicles = self.vehicles.copy()
                     new_vehicles.remove(vehicle)
                     new_vehicles.add(new_vehicle)
                     if self.notInArchive(new_vehicles):
-                        yield Grid(new_vehicles, self.n)
+                        moves.append(Grid(new_vehicles, self.n))
+        return moves
 
     def notInArchive(self, new_vehicles):
         matrix = ''

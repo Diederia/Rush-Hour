@@ -68,7 +68,8 @@ def a_star_search(game):
                 queue.put(move, priority)
                 came_from[move] = board
 
-    return 'No solution found!'
+    end_time = 0
+    return solution, end_time
 
 """
 http://www.redblobgames.com/pathfinding/a-star/implementation.html

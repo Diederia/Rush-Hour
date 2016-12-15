@@ -20,7 +20,6 @@ def load_file(csv_file):
 
     Returns: a Grid object representing the chosen board.
     """
-
     vehicles = []
     with open(csv_file, 'rb') as csv_open_file:
         reader = csv.reader(csv_open_file)
@@ -65,9 +64,6 @@ def visualize(solution):
 
     Returns: ??
     """
-    # os.system('clear')
-    # print solution[0][0]
-    # time.sleep(5)
     os.system('clear')
     for i in range (len(solution[0]) - 1):
         print (solution[0][i])
@@ -78,7 +74,7 @@ def visualize(solution):
 
 def main():
     if len(sys.argv) != 3:
-        print "Usage example: python Boards/board.csv algorithm filename.py"
+        print "Usage example: python rushhour.py Boards/board.csv algorithm"
 
     csv_file = sys.argv[1]
     algorithm = sys.argv[2]
@@ -87,15 +83,26 @@ def main():
 
     if algorithm == 'astar':
         path, end_time = a_star_search(game)
-        solution = [path[1:]]
-        # print visualize(solution)
-        print 'Solution steps: {0}'.format(', '.join(solution_steps(solution)))
+        if end_time == 0:
+            print "No solution found!"
+        else:
+            solution = [path[1:]]
+            # print visualize(solution)
+            print 'Solution steps: {0}'.format(', '.join(solution_steps(solution)))
     elif algorithm == 'bfs':
         solution, end_time = bfs(game, 10000)
-        # print visualize(solution)
-        print 'Solution steps: {0}'.format(', '.join(solution_steps(solution)))
+        if end_time == 0:
+            print "No solution found!"
+        else:
+            # print visualize(solution)
+            print 'Solution steps: {0}'.format(', '.join(solution_steps(solution)))
     elif algorithm == 'beamsearch':
         solution, end_time = beamSearch(game, 1000)
+        if end_time == 0:
+            print "No solution found!"
+        else:
+            # print visualize(solution)
+            print 'Solution steps: {0}'.format(', '.join(solution_steps(solution)))
     else:
         print 'Please enter astar or bfs'
 

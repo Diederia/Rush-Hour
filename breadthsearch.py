@@ -17,7 +17,7 @@ def bfs(game, max_depth):
     took the algorithm to find the solution. If there is no solution found,
     it will alert the user this board has no solution.
     """
-    archive = set()
+    moves = []
     solution = list()
     queue = deque()
     queue.appendleft((game, tuple()))
@@ -40,7 +40,8 @@ def bfs(game, max_depth):
             return solution, end_time
         # comment
         else:
-            queue.extendleft((move, new_path) for move in board.getMoves())
+            moves = board.getMoves()
+            queue.extendleft((move, new_path) for move in moves)
 
-
-    return 'No solution found!'
+    end_time = 0
+    return solution, end_time
