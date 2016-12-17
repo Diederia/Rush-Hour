@@ -9,12 +9,23 @@ Running the code with command line in the terminal: python Boards/board.csv algo
 Example if you would like to run the 5th board with an astar algorithm
 
 ```
-python Boards/board5.csv astar rushhour.py
+python rushhour.py Boards/board5.csv astar
 ```
+
+## Files
+    Files in this repository:
+    Boards             - File with representations of board 1 till 7
+    astar              - A* algorithm with differen heuristics
+    beamsearch         - Beamsearch alogrithm
+    breadthsearch      - Breadthsearch algorithm
+    grid               - Class Grid representing a rushhour board
+    rushhour           - This file contains the main file in order to run the program
+    vehicle            - Class Vehicle representing a vehicle on the board
 
 ## Built With
 
-* [Atom](https://atom.io) - text editor
+* [Atom Version 1.12.7](https://atom.io) - text editor
+* [Python Version 2.7](https://www.python.org/download/releases/2.7/)
 
 ## Authors
 
