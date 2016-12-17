@@ -1,3 +1,13 @@
+'''
+    File description:
+    This file contains the implementation of an A* algorithm, 
+    based on the Rush Hour puzzle. The goal of this algorithm is 
+    to find the shortest path to the solution possible. 
+    
+    Part of the implementation is cited from: 
+    http://www.redblobgames.com/pathfinding/a-star/implementation.html
+'''
+
 import time
 import Queue
 import grid
@@ -5,17 +15,19 @@ import heapq
 
 def reconstruct_path(came_from, start, goal):
     """
-    EXPLANATION
+    Starting from the goal situation, it finds it parent till the start situation is
+    reached.
 
-    came_from:
-    start:
-    goal:
+    came_from: ?? 
+    start: begin configuration of the board
+    goal: situation where the red car stands next to the exit
 
-    Returns: ??
+    Returns: The steps it took from the start situation to the goal situation. 
     """
     current = goal
     path = [current]
-    # comment
+    
+    # Append configuartion to board as a step until the begin situation is reached
     while current != start:
         current = came_from[current]
         path.append(current)
@@ -23,7 +35,6 @@ def reconstruct_path(came_from, start, goal):
     path.reverse()
     return path
 
-# path is came from
 def a_star_search(game):
     """
     This function starts an A* alogrithm finding the optimal
@@ -45,22 +56,24 @@ def a_star_search(game):
     start = time.clock()
     counter = 0
 
-    #comment
+    # Get board configuration out of the queue till non is left
     while not queue.empty():
         board = queue.get()
 
-        # comment
+        # Checks if the board is solved
         if board.solved():
+            # If sovled it reconstructs the path and time to calculate the solution
             path = reconstruct_path(came_from, game, board)
             end = time.clock()
             end_time = end - start
             return path, end_time
 
-        # comment
+        # Get every move possible from a certain board configuration
         for move in board.getMoves():
-            #comment
+            # Every step has a cost of 1 
             new_cost = cost[board] + 1
-
+            
+            # Calculate the costs of a move through heuristics. The costs define the priority of a board. 
             if move not in cost or new_cost < cost[move]:
                 cost[move] = new_cost
                 boardFromMove = move.createBoard(move.vehicles)
@@ -71,10 +84,6 @@ def a_star_search(game):
 
     end_time = 0
     return solution, end_time
-
-"""
-http://www.redblobgames.com/pathfinding/a-star/implementation.html
-"""
 
 def blockerEstimate(move, boardFromMove):
     """
@@ -116,8 +125,7 @@ def fromGoal(move, boardFromMove):
 
 def advancedHeuristic2(move, boardFromMove):
     """
-    Twee soorten, 1 voor de boards van 6x6 en 1 voor de grotere boards.
-    Dit komt doordat je anders niet meer in de range van het board ben met checken.
+    EXPLANATION. 
 
     move: Grid object of the current situation
 
