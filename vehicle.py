@@ -1,4 +1,7 @@
-
+'''
+    File description:
+    This file contains Vehicle object used represent a single vehicle. 
+'''
 
 class Vehicle(object):
     """
