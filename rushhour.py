@@ -1,3 +1,8 @@
+'''
+    File description:
+    This file contains the main file in order to run the program. 
+'''
+
 import cProfile
 
 import sys
@@ -35,7 +40,7 @@ def solution_steps(solution):
     """
     Generate list of steps to the solution.
 
-    results: ??
+    solution: ??
 
     Returns: an array of moves that lead to the solution.
     """
@@ -60,7 +65,7 @@ def visualize(solution):
     Simulation of the different steps on the board that lead to
     the solution from a breadth search algorithm.
 
-    results: ??
+    solution: ??
 
     Returns: ??
     """
