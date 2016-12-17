@@ -1,5 +1,11 @@
-# Rush Hour Breadth search algorithm
-# Diederick, Valentijn en Jill
+'''
+    File description:
+    This file contains the implementation of the breadth first search algorithm. 
+    The breadth first search algorithm is an exhaustive search algorithm. 
+    It finds the shortest path towards the goal (if there is one). 
+    Implementation is based on Rush Hour puzzles.  
+'''
+
 import time
 from collections import deque
 import grid
@@ -23,25 +29,25 @@ def bfs(game, max_depth):
     queue.appendleft((game, tuple()))
     start = time.clock()
 
-    # comment
+    # Dequeue element from queue if there are elements left
     while len(queue) != 0:
         board, path = queue.pop()
         new_path = path + tuple([board])
 
-        # comment
+        # Checks if maximum depht isn't exceeded 
         depth = len(new_path)
         # print"Depth:"
         # print depth
         if depth >= max_depth:
             break
 
-        # comment
+        # Checks if the board is solved
         if board.solved():
             solution.append(new_path)
             end = time.clock()
             end_time = end - start
             return solution, end_time
-        # comment
+        # Get every possible move from current board configuration
         else:
             moves = board.getMoves()
             queue.extendleft((move, new_path) for move in moves)
