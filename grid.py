@@ -1,3 +1,8 @@
+'''
+    File description:
+    This file contains Grid object used represent all the board configurations possible. 
+'''
+
 from copy import deepcopy
 from rushhour import *
 
@@ -27,9 +32,10 @@ class Grid(object):
             self.exit_y = self.n / 2
 
 
-    # repr eruit wanneer we gaan runnen, bij visualize wel.
     def __repr__(self):
-        "Returns a matrix that represents a board with borders around it."
+        """ 
+        Returns a matrix that represents a board with borders around it.
+        """
         counter = 0
         matrix = '*' * (self.n * 2 + 3) + '\n'
         for row in self.createBoard(self.vehicles):
@@ -48,7 +54,9 @@ class Grid(object):
         return matrix
 
     def createBoard(self, vehicles):
-        """Representation of the Rush Hour board as a 2D list of strings"""
+        """
+        Representation of the Rush Hour board as a 2D list of strings
+        """
         board = [ [' '] * self.n for _ in range(self.n)]
         for vehicle in vehicles:
             x, y = vehicle.x, vehicle.y
@@ -61,7 +69,9 @@ class Grid(object):
         return board
 
     def solved(self):
-        """Returns true if the board is in a solved state."""
+        """
+        Returns true if the board is in a solved state.
+        """
         for vehicle in self.vehicles:
             if vehicle.name == 'x':
                 if vehicle.x == self.exit_x:
@@ -82,7 +92,7 @@ class Grid(object):
         for vehicle in self.vehicles:
             # checks if the orientation of the vehicle is horizontal
             if vehicle.orientation == 'h':
-                # LEFT
+                # Can the vehicle move to the LEFT?
                 if vehicle.x - 1 >= 0 and board[vehicle.y][vehicle.x - 1] == ' ':
                     new_vehicle = Vehicle(vehicle.name, vehicle.x - 1, vehicle.y, vehicle.orientation, vehicle.length)
                     new_vehicles = self.vehicles.copy()
@@ -90,7 +100,7 @@ class Grid(object):
                     new_vehicles.add(new_vehicle)
                     if self.notInArchive(new_vehicles):
                         moves.append(Grid(new_vehicles, self.n))
-                # RIGHT
+                # Can the vehicle move to the RIGHT?
                 if vehicle.x + vehicle.length < self.n and board[vehicle.y][vehicle.x + vehicle.length] == ' ':
                     new_vehicle = Vehicle(vehicle.name, vehicle.x + 1, vehicle.y, vehicle.orientation, vehicle.length)
                     new_vehicles = self.vehicles.copy()
@@ -100,7 +110,7 @@ class Grid(object):
                         moves.append(Grid(new_vehicles, self.n))
             # checks if the orientation of the vehicle is vertical
             else:
-                # UP
+                # Can the vehicle move UP?
                 if vehicle.y - 1 >= 0 and board[vehicle.y - 1][vehicle.x] == ' ':
                     new_vehicle = Vehicle(vehicle.name, vehicle.x, vehicle.y - 1, vehicle.orientation, vehicle.length)
                     new_vehicles = self.vehicles.copy()
@@ -108,7 +118,7 @@ class Grid(object):
                     new_vehicles.add(new_vehicle)
                     if self.notInArchive(new_vehicles):
                         moves.append(Grid(new_vehicles, self.n))
-                # DOWN
+                # Can the vehicle move DOWN?
                 if vehicle.y + vehicle.length < self.n and board[vehicle.y + vehicle.length][vehicle.x] == ' ':
                     new_vehicle = Vehicle(vehicle.name, vehicle.x, vehicle.y + 1, vehicle.orientation, vehicle.length)
                     new_vehicles = self.vehicles.copy()
@@ -119,6 +129,9 @@ class Grid(object):
         return moves
 
     def notInArchive(self, new_vehicles):
+        """
+        EXPLANATION. 
+        """
         print len(archive)
         matrix = ''
         for row in self.createBoard(new_vehicles):
@@ -131,6 +144,9 @@ class Grid(object):
             return True
 
     def isVehicleBlocked(self, name, boardFromMove, vistedVehicles):
+        """
+        This heuristic check how many vehicles block a car. 
+        """
         board = boardFromMove
         for vehicle in self.vehicles:
             if name == vehicle.name:
