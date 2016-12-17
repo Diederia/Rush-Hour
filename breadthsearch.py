@@ -30,8 +30,8 @@ def bfs(game, max_depth):
 
         # comment
         depth = len(new_path)
-        print"Depth:"
-        print depth
+        # print"Depth:"
+        # print depth
         if depth >= max_depth:
             break
 

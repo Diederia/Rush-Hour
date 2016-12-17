@@ -1,4 +1,3 @@
-import numpy
 from copy import deepcopy
 from rushhour import *
 
@@ -31,25 +30,22 @@ class Grid(object):
     # repr eruit wanneer we gaan runnen, bij visualize wel.
     def __repr__(self):
         "Returns a matrix that represents a board with borders around it."
-        # counter = 0
-        # matrix = '*' * (self.n * 2 + 3) + '\n'
+        counter = 0
+        matrix = '*' * (self.n * 2 + 3) + '\n'
+        for row in self.createBoard(self.vehicles):
+            if counter == self.exit_y:
+                matrix += '* {0} \n'.format(' '.join(row))
+            else:
+                matrix += '* {0} *\n'.format(' '.join(row))
+            counter +=1
+        matrix += '*' * (self.n * 2 + 3) + '\n'
+
+
+        # matrix = ''
         # for row in self.createBoard(self.vehicles):
-        #     if counter == self.exit_y:
-        #         matrix += '* {0} \n'.format(' '.join(row))
-        #     else:
-        #         matrix += '* {0} *\n'.format(' '.join(row))
-        #     counter +=1
-        # matrix += '*' * (self.n * 2 + 3) + '\n'
-        #
-        # #
-        # # matrix = ''
-        # # for row in self.createBoard(self.vehicles):
-        # #     matrix += '' .join(row)
+        #     matrix += '' .join(row)
 
         return matrix
-
-
-        # return str(self.createBoard()):
 
     def createBoard(self, vehicles):
         """Representation of the Rush Hour board as a 2D list of strings"""
@@ -123,7 +119,7 @@ class Grid(object):
         return moves
 
     def notInArchive(self, new_vehicles):
-        # print len(archive)
+        print len(archive)
         matrix = ''
         for row in self.createBoard(new_vehicles):
             matrix += ''.join(row)
@@ -134,97 +130,31 @@ class Grid(object):
             archive.add(matrix)
             return True
 
-
-    def blockerEstimate(self, move):
-        """
-        Checks how many vehicles are standing in front of the (red) target car
-
-        move: Grid object of the current situation
-
-        Returns: an integer that represents the amount of vehicles blocking the
-        (red) target car
-        """
-        new_vehicles = move.vehicles
-        board = self.createBoard(new_vehicles)
-        score = 0
-        for i in range(self.n):
-            currentPlace = board[self.exit_y][self.n - (i + 1)]
-            if currentPlace != 'x':
-                if currentPlace != ' ':
-                    score += 2
-            else:
-                return score
-
-
-    def fromGoal(self, move):
-        """
-        Checks how many steps away the (red) target car is from the exit
-
-        move: Grid object of the current situation
-
-        Returns: an integer that represents the amount of moves the (red)
-        target car needs to make before it is at the exit position
-        """
-        new_vehicles = move.vehicles
-        board = self.createBoard(new_vehicles)
-        score = 0
-        for i in range(self.n):
-            currentPlace = board[self.exit_y][self.n - (i + 1)]
-            if currentPlace == 'x':
-                return score
-            else:
-                score += 1
-
-    def advancedHeuristic(self, move):
-        """
-        Twee soorten, 1 voor de boards van 6x6 en 1 voor de grotere boards.
-        Dit komt doordat je anders niet meer in de range van het board ben met checken.
-
-        move: Grid object of the current situation
-
-        Returns: an integer
-        """
-        new_vehicles = move.vehicles
-        board = self.createBoard(new_vehicles)
-        score = 0
-        for i in range(self.n):
-            currentPlace = board[self.exit_y][self.n - (i + 1)]
-            if currentPlace != ' ' and currentPlace != 'x':
-                if board[self.exit_y - 1][self.n - (i + 1)] == currentPlace:
-                    if board[self.exit_y - 2][self.n - (i + 1)] == currentPlace:
-                        if board[self.exit_y - 3][self.n - (i + 1)] != ' ':
-                            # print 'test1'
-                            score += 1
-                    elif board[self.exit_y - 2][self.n - (i + 1)] != ' ':
-                        # print 'test2'
-                        score += 1
-                elif board[self.exit_y - 1][self.n - (i + 1)] != ' ':
-                    # print 'test3'
-                    score += 1
-                if board[self.exit_y + 1][self.n - (i + 1)] == currentPlace:
-                    if board[self.exit_y + 2][self.n - (i + 1)] == currentPlace:
-                        if board[self.exit_y + 3][self.n - (i + 1)] != ' ':
-                            # print 'test4'
-                            score += 1
-                    elif board[self.exit_y + 2][self.n - (i + 1)] != ' ':
-                        # print 'test5'
-                        score += 1
-                elif board[self.exit_y + 1][self.n - (i + 1)] != ' ':
-                    # print 'test6'
-                    score += 1
-        return score
-        # for i in range(self.n):
-        #     currentPlace = self.board[self.exit_y][self.n - (i + 1)]
-        #     if currentPlace != ' ' and currentPlace != 'x':
-        #         if self.board[self.exit_y - 1][self.n - (i + 1)] == currentPlace:
-        #             if self.board[self.exit_y - 2][self.n - (i + 1)] != currentPlace and self.board[self.exit_y - 2][self.n - (i + 1)] != ' ':
-        #                 score += 100
-        #         elif self.board[self.exit_y - 1][self.n - (i + 1)] != ' ':
-        #             score += 100
-        #         if self.board[self.exit_y + 1][self.n - (i + 1)] == currentPlace:
-        #             if self.board[self.exit_y - 2][self.n - (i + 1)] != currentPlace and self.board[self.exit_y - 2][self.n - (i + 1)] != ' ':
-        #                 score += 100
-        #         elif self.board[self.exit_y + 1][self.n - (i + 1)] != ' ':
-        #             score += 100
-        #
-        # return score
+    def isVehicleBlocked(self, name, boardFromMove, vistedVehicles):
+        board = boardFromMove
+        for vehicle in self.vehicles:
+            if name == vehicle.name:
+                print vehicle
+                if vehicle.orientation == 'h':
+                    if vehicle.x + vehicle.length < self.n and board[vehicle.y][vehicle.x + vehicle.length] != ' ':
+                        vistedVehicles.add(name)
+                        currentName = board[vehicle.y][vehicle.x + vehicle.length]
+                        if currentName not in vistedVehicles:
+                            return currentName, vistedVehicles
+                    if vehicle.x - 1 >= 0 and board[vehicle.y][vehicle.x - 1] != ' ':
+                        vistedVehicles.add(name)
+                        currentName = board[vehicle.y][vehicle.x - 1]
+                        if currentName not in vistedVehicles:
+                            return currentName, vistedVehicles
+                else:
+                    if vehicle.y + vehicle.length < self.n and board[vehicle.y + vehicle.length][vehicle.x] != ' ':
+                        vistedVehicles.add(name)
+                        currentName = board[vehicle.y + vehicle.length][vehicle.x]
+                        if currentName not in vistedVehicles:
+                            return currentName, vistedVehicles
+                    if vehicle.y - 1 >= 0 and board[vehicle.y  - 1][vehicle.x] != ' ':
+                        vistedVehicles.add(name)
+                        currentName = board[vehicle.y - 1][vehicle.x]
+                        if currentName not in vistedVehicles:
+                            return currentName, vistedVehicles
+                return False
