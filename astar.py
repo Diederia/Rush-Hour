@@ -5,7 +5,7 @@
     to find the shortest path to the solution possible.
 
     Part of the implementation is cited from:
-    http://www.redblobgames.com/pathfinding/a-star/implementation.html
+    http://www.redblobstarts.com/pathfinding/a-star/implementation.html
 '''
 import grid
 import Queue
@@ -13,45 +13,24 @@ import heapq
 import time as clock
 
 
-def reconstruct_path(came_from, start, goal):
-    """Starting from the goal situation, it finds it parent till the start situation is
-    reached.
-
-    came_from: a dictionary with the move as key and grid as value.
-    start: begin configuration of the board
-    goal: situation where the red car stands next to the exit
-
-    Returns: The steps it took from the start situation to the goal situation.
-    """
-    current = goal
-    path = [current]
-
-    # Append configuartion to board as a step until the begin situation is reached
-    while current != start:
-        current = came_from[current]
-        path.append(current)
-    path.append(start)
-    path.reverse()
-    return [path[1:]]
-
-def a_star_search(game):
+def a_star_search(start):
     """
     This function starts an A* alogrithm finding the optimal
     solution for the rush hour board given to it.
 
-    game: the initial rush hour board
+    start: the initial rush hour board
 
     Returns: a list representing the path to the solution and the end time
     in seconds it took the algorithm to find the solution.
     If there is no solution found, it will alert the user this board has no solution.
     """
     queue = Queue.PriorityQueue()
-    queue.put(game, 0)
+    queue.put(start, 0)
     came_from = dict()
     cost = dict()
     path = list()
-    came_from[game] = None
-    cost[game] = 0
+    came_from[start] = None
+    cost[start] = 0
     start_time = clock.clock()
     counter = 0
 
@@ -61,11 +40,10 @@ def a_star_search(game):
 
         # Checks if the board is solved
         if grid.solved():
-            # If sovled it reconstructs the path and time to calculate the solution
-            solution = reconstruct_path(came_from, game, grid)
+            # If sovled calculate time to solve the game
             end_time = clock.clock()
             time = end_time - start_time
-            return solution, time
+            return came_from, grid, time
 
         # Get every move possible from a certain board configuration
         board_moves = grid.create_board(grid.vehicles)

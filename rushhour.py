@@ -25,18 +25,18 @@ def main():
     algorithm = sys.argv[2]
 
     # Unload csv file
-    game = load_file(csv_file)
+    start = load_file(csv_file)
 
     # Running program on the right algorithm and showing results
     if algorithm == 'astar':
-        solution, time = a_star_search(game)
-        display_results(time, solution)
+        came_from, goal, time = a_star_search(start)
+        display_results(start, came_from, goal, time)
     elif algorithm == 'bfs':
-        solution, time = bfs(game)
-        display_results(time, solution)
+        came_from, goal, time = bfs(start)
+        display_results(start, came_from, goal, time)
     elif algorithm == 'beamsearch':
-        solution, time = beamSearch(game)
-        display_results(time, solution)
+        came_from, goal, time = beamSearch(start)
+        display_results(start, came_from, goal, time)
     else:
         print 'Please enter astar or bfs'
 
@@ -68,13 +68,35 @@ def load_file(csv_file):
                 n = int(row[0])
     return Grid(set(vehicles), n)
 
-def display_results(time, solution):
+def display_results(start, came_from, goal, time):
     if time == 0:
         print "No solution found!"
     else:
+        solution = reconstruct_path(came_from, start, goal)
         visualize(solution)
         print 'Solution steps: {0}'.format(', '.join(solution_steps(solution)))
         print 'Time to find solution of the board: {0}'.format(time) + '.'
+
+def reconstruct_path(came_from, start, goal):
+    """Starting from the goal situation, it finds it parent till the start situation is
+    reached.
+
+    came_from: a dictionary with the move as key and grid as value.
+    start: begin configuration of the board
+    goal: situation where the red car stands next to the exit
+
+    Returns: The steps it took from the start situation to the goal situation.
+    """
+    current = goal
+    path = [current]
+
+    # Append configuartion to board as a step until the begin situation is reached
+    while current != start:
+        current = came_from[current]
+        path.append(current)
+    path.append(start)
+    path.reverse()
+    return [path[1:]]
 
 def visualize(solution):
     """Simulation of the different steps on the board that lead to
@@ -131,5 +153,5 @@ def solution_steps(solution):
     return steps
 
 if __name__ == '__main__':
-    # main()
-    cProfile.run('main()')
+    main()
+    # cProfile.run('main()')
