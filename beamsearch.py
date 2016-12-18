@@ -1,6 +1,6 @@
 # Rush Hour Breadth search algorithm
 # Diederick, Valentijn en Jill
-import time
+import time as clock
 from collections import deque
 import grid
 
@@ -10,8 +10,6 @@ def beamSearch(game, max_depth):
     Arguments:
         Game : A RushHour board.
 
-    Keyword Arguments:
-        max_depth: 1000
     """
     solution = list()
     queue = deque()
@@ -23,7 +21,7 @@ def beamSearch(game, max_depth):
 
 
         if len(new_path)%5 == 0:
-            for moves in board.getMoves():
+            for moves in board.get_moves():
                 cost = 10000
                 new_cost = board.advancedHeuristic(moves) + board.fromGoal(moves)
                 if new_cost <= cost:
@@ -33,11 +31,11 @@ def beamSearch(game, max_depth):
 
         if board.solved():
             solution.append(new_path)
-            end = time.clock()
+            end = clock.clock()
             end_time = end - start
             return solution, end_time
         else:
-            queue.extendleft((move, new_path) for move in board.getMoves())
+            queue.extendleft((move, new_path) for move in board.get_moves())
 
     end_time = 0
     return solution, end_time

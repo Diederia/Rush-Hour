@@ -1,12 +1,12 @@
 '''
     File description:
-    This file contains Grid object used represent all the board configurations possible. 
+    This file contains Grid object used represent all the board configurations possible.
 '''
 
-from copy import deepcopy
-from rushhour import *
+from vehicle import Vehicle
 
-# Global archive
+# Global moves and archive
+moves = []
 archive = set()
 
 class Grid(object):
@@ -24,40 +24,47 @@ class Grid(object):
         """
         self.n = n
         self.vehicles = vehicles
-
         self.exit_x = self.n - 2
+
+        # Define coordinates exit, for odd number of size y coordinate - 1
         if n != 9:
             self.exit_y = self.n / 2 - 1
         else:
             self.exit_y = self.n / 2
 
-
     def __repr__(self):
-        """ 
-        Returns a matrix that represents a board with borders around it.
+        """
+        Returns a board that represents a grid with borders around it.
         """
         counter = 0
-        matrix = '*' * (self.n * 2 + 3) + '\n'
-        for row in self.createBoard(self.vehicles):
+
+        # Makes the upper border of the board
+        board = '*' * (self.n * 2 + 3) + '\n'
+
+        # Makes the side borders and row, skips the border at the exit
+        for row in self.create_board(self.vehicles):
             if counter == self.exit_y:
-                matrix += '* {0} \n'.format(' '.join(row))
+                board += '* {0} \n'.format(' '.join(row))
             else:
-                matrix += '* {0} *\n'.format(' '.join(row))
+                board += '* {0} *\n'.format(' '.join(row))
             counter +=1
-        matrix += '*' * (self.n * 2 + 3) + '\n'
 
+        # Makes the lower border of the board
+        board += '*' * (self.n * 2 + 3) + '\n'
+        return board
 
-        # matrix = ''
-        # for row in self.createBoard(self.vehicles):
-        #     matrix += '' .join(row)
+    def create_board(self, vehicles):
+        """Representation of the Rush Hour board as a 2D list of strings
 
-        return matrix
+        vehicles: list of information about the vehicles
 
-    def createBoard(self, vehicles):
+        Returns: multiple arrays in an array representing a board filled with
+        vehicles.
         """
-        Representation of the Rush Hour board as a 2D list of strings
-        """
+        # Makes multiple empty arrays, representing an empty board
         board = [ [' '] * self.n for _ in range(self.n)]
+
+        # Loops through all the vehicles and places it on the board
         for vehicle in vehicles:
             x, y = vehicle.x, vehicle.y
             if vehicle.orientation == 'h':
@@ -69,108 +76,117 @@ class Grid(object):
         return board
 
     def solved(self):
-        """
-        Returns true if the board is in a solved state.
+        """Checks if the board is solves, by checking if the target car (always
+        named x) is on the coordinates of the exit.
+
+        Returns: a boolian, true if the board is in a solved state and
+        false otherwise.
         """
         for vehicle in self.vehicles:
             if vehicle.name == 'x':
                 if vehicle.x == self.exit_x:
-                    print"test4"
                     return True
                 else:
                     return False
 
-    def getMoves(self):
-        """
-        Checks and returns all the possible moves from a current situation.
+    def get_moves(self, board):
+        """Checks and returns all the possible moves from a current Grid object.
 
-        Returns: iterator of next possible moves.
+        Returns: a list of moves.
         """
-        moves = []
-        board = self.createBoard(self.vehicles)
-        # iterates over all the vehicles on the board
+        # Clear the move list
+        moves[:] = []
+
+        # Iterates over all the vehicles on the board
         for vehicle in self.vehicles:
-            # checks if the orientation of the vehicle is horizontal
+            # Checks if the orientation of the vehicle is horizontal
             if vehicle.orientation == 'h':
-                # Can the vehicle move to the LEFT?
+                # Can the vehicle move to the LEFT
                 if vehicle.x - 1 >= 0 and board[vehicle.y][vehicle.x - 1] == ' ':
                     new_vehicle = Vehicle(vehicle.name, vehicle.x - 1, vehicle.y, vehicle.orientation, vehicle.length)
-                    new_vehicles = self.vehicles.copy()
-                    new_vehicles.remove(vehicle)
-                    new_vehicles.add(new_vehicle)
-                    if self.notInArchive(new_vehicles):
-                        moves.append(Grid(new_vehicles, self.n))
-                # Can the vehicle move to the RIGHT?
+                    self.add_move(vehicle, new_vehicle)
+                # Can the vehicle move to the RIGHT
                 if vehicle.x + vehicle.length < self.n and board[vehicle.y][vehicle.x + vehicle.length] == ' ':
                     new_vehicle = Vehicle(vehicle.name, vehicle.x + 1, vehicle.y, vehicle.orientation, vehicle.length)
-                    new_vehicles = self.vehicles.copy()
-                    new_vehicles.remove(vehicle)
-                    new_vehicles.add(new_vehicle)
-                    if self.notInArchive(new_vehicles):
-                        moves.append(Grid(new_vehicles, self.n))
-            # checks if the orientation of the vehicle is vertical
+                    self.add_move(vehicle, new_vehicle)
+            # Checks if the orientation of the vehicle is vertical
             else:
-                # Can the vehicle move UP?
+                # Can the vehicle move to the UP
                 if vehicle.y - 1 >= 0 and board[vehicle.y - 1][vehicle.x] == ' ':
                     new_vehicle = Vehicle(vehicle.name, vehicle.x, vehicle.y - 1, vehicle.orientation, vehicle.length)
-                    new_vehicles = self.vehicles.copy()
-                    new_vehicles.remove(vehicle)
-                    new_vehicles.add(new_vehicle)
-                    if self.notInArchive(new_vehicles):
-                        moves.append(Grid(new_vehicles, self.n))
-                # Can the vehicle move DOWN?
+                    self.add_move(vehicle, new_vehicle)
+                # Can the vehicle move to the DOWN
                 if vehicle.y + vehicle.length < self.n and board[vehicle.y + vehicle.length][vehicle.x] == ' ':
                     new_vehicle = Vehicle(vehicle.name, vehicle.x, vehicle.y + 1, vehicle.orientation, vehicle.length)
-                    new_vehicles = self.vehicles.copy()
-                    new_vehicles.remove(vehicle)
-                    new_vehicles.add(new_vehicle)
-                    if self.notInArchive(new_vehicles):
-                        moves.append(Grid(new_vehicles, self.n))
+                    self.add_move(vehicle, new_vehicle)
         return moves
 
-    def notInArchive(self, new_vehicles):
-        """
-        EXPLANATION. 
-        """
-        print len(archive)
-        matrix = ''
-        for row in self.createBoard(new_vehicles):
-            matrix += ''.join(row)
 
-        if matrix in archive:
+    def add_move(self, vehicle, new_vehicle):
+        """Creates a new list of vehicles, checks if it's in the archive and
+        append the new grid object to moves list.
+        """
+        new_vehicles = self.vehicles.copy()
+        new_vehicles.remove(vehicle)
+        new_vehicles.add(new_vehicle)
+        if self.not_in_archive(new_vehicles):
+            moves.append(Grid(new_vehicles, self.n))
+
+    def nodes_counter(self):
+        return
+
+    def not_in_archive(self, new_vehicles):
+        """Checks if the vehicle is not in archive."""
+
+        # Create board because list is not hashable
+        board = ''
+        for row in self.create_board(new_vehicles):
+            board += ''.join(row)
+
+        if board in archive:
             return False
         else:
-            archive.add(matrix)
+            self.nodes_counter()
+            archive.add(board)
             return True
 
-    def isVehicleBlocked(self, name, boardFromMove, vistedVehicles):
-        """
-        This heuristic check how many vehicles block a car. 
-        """
-        board = boardFromMove
+    def is_vehicle_blocked(self, name, board, visted_vehicles):
+        """Loops through vehicles """
+
         for vehicle in self.vehicles:
             if name == vehicle.name:
-                print vehicle
                 if vehicle.orientation == 'h':
-                    if vehicle.x + vehicle.length < self.n and board[vehicle.y][vehicle.x + vehicle.length] != ' ':
-                        vistedVehicles.add(name)
-                        currentName = board[vehicle.y][vehicle.x + vehicle.length]
-                        if currentName not in vistedVehicles:
-                            return currentName, vistedVehicles
-                    if vehicle.x - 1 >= 0 and board[vehicle.y][vehicle.x - 1] != ' ':
-                        vistedVehicles.add(name)
-                        currentName = board[vehicle.y][vehicle.x - 1]
-                        if currentName not in vistedVehicles:
-                            return currentName, vistedVehicles
+                    if vehicle.x + vehicle.length == self.n and board[vehicle.y][vehicle.x - 1] != ' ':
+                        current_name = board[vehicle.y][vehicle.x - 1]
+                        return self.return_blocked(name, visted_vehicles, current_name)
+                    if vehicle.x - 1 < 0 and board[vehicle.y][vehicle.x + vehicle.length] != ' ':
+                        current_name = board[vehicle.y][vehicle.x + vehicle.length]
+                        return self.return_blocked(name, visted_vehicles, current_name)
+                    if board[vehicle.y][vehicle.x - 1] != ' ' and board[vehicle.y][vehicle.x + vehicle.length] != ' ':
+                        current_name = board[vehicle.y][vehicle.x + vehicle.length]
+                        if self.return_blocked(name, visted_vehicles, current_name) == None:
+                            current_name = board[vehicle.y][vehicle.x - 1]
+                            return self.return_blocked(name, visted_vehicles, current_name)
+                        else:
+                            return self.return_blocked(name, visted_vehicles, current_name)
                 else:
-                    if vehicle.y + vehicle.length < self.n and board[vehicle.y + vehicle.length][vehicle.x] != ' ':
-                        vistedVehicles.add(name)
-                        currentName = board[vehicle.y + vehicle.length][vehicle.x]
-                        if currentName not in vistedVehicles:
-                            return currentName, vistedVehicles
-                    if vehicle.y - 1 >= 0 and board[vehicle.y  - 1][vehicle.x] != ' ':
-                        vistedVehicles.add(name)
-                        currentName = board[vehicle.y - 1][vehicle.x]
-                        if currentName not in vistedVehicles:
-                            return currentName, vistedVehicles
-                return False
+                    if vehicle.y + vehicle.length == self.n and board[vehicle.y - 1][vehicle.x] != ' ':
+                        current_name = board[vehicle.y - 1][vehicle.x]
+                        return self.return_blocked(name, visted_vehicles, current_name)
+                    if vehicle.y - 1 < 0 and board[vehicle.y + vehicle.length][vehicle.x] != ' ':
+                        current_name = board[vehicle.y + vehicle.length][vehicle.x]
+                        return self.return_blocked(name, visted_vehicles, current_name)
+                    if board[vehicle.y - 1][vehicle.x] != ' ' and board[vehicle.y + vehicle.length][vehicle.x] != ' ':
+                        current_name = board[vehicle.y + vehicle.length][vehicle.x]
+                        if self.return_blocked(name, visted_vehicles, current_name) == None:
+                            current_name = board[vehicle.y - 1][vehicle.x]
+                            return self.return_blocked(name, visted_vehicles, current_name)
+                        else:
+                            return self.return_blocked(name, visted_vehicles, current_name)
+                return None
+
+    def return_blocked(self, name, visted_vehicles, current_name):
+        visted_vehicles.add(name)
+        if current_name not in visted_vehicles:
+            return current_name, visted_vehicles
+        return None
