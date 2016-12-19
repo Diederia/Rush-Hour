@@ -25,13 +25,16 @@ def bfs(start):
     queue = deque()
     queue.appendleft(start)
     start_time = clock.clock()
+    visited_nodes = 0
 
     # Dequeue element from queue if there are elements left
     while len(queue) != 0:
         grid = queue.pop()
+        visited_nodes += 1
 
         if grid.solved():
             # If sovled calculate time to solve the game
+            print visited_nodes
             end_time = clock.clock()
             time = end_time - start_time
             return came_from, grid, time
