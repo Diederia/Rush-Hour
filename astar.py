@@ -8,10 +8,21 @@
     http://www.redblobstarts.com/pathfinding/a-star/implementation.html
 '''
 import grid
-import Queue
 import heapq
 import time as clock
 
+class PriorityQueue:
+    def __init__(self):
+        self.elements = []
+
+    def empty(self):
+        return len(self.elements) == 0
+
+    def put(self, item, priority):
+        heapq.heappush(self.elements, (priority, item))
+
+    def get(self):
+        return heapq.heappop(self.elements)[1]
 
 def a_star_search(start):
     """
@@ -24,7 +35,7 @@ def a_star_search(start):
     in seconds it took the algorithm to find the solution.
     If there is no solution found, it will alert the user this board has no solution.
     """
-    queue = Queue.PriorityQueue()
+    queue = PriorityQueue()
     queue.put(start, 0)
     came_from = dict()
     cost = dict()
@@ -32,15 +43,17 @@ def a_star_search(start):
     came_from[start] = None
     cost[start] = 0
     start_time = clock.clock()
-    counter = 0
+    visted_nodes = 0
 
     # Get board configuration out of the queue till non is left
     while not queue.empty():
         grid = queue.get()
+        visited_nodes += 1
 
         # Checks if the board is solved
         if grid.solved():
             # If sovled calculate time to solve the game
+            print visited_nodes
             end_time = clock.clock()
             time = end_time - start_time
             return came_from, grid, time
