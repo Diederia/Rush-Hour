@@ -5,15 +5,16 @@ This is a rush hour solver written in python. It is tested using seven different
 1. Download Github Project
 2. Install python 2.7
 3. Open project directory in terminal
-4. Running the code with command line in the terminal: python Boards/board.csv algorithm rushhour.py
+4. Running the code with command line in the terminal: python rushhour.py Boards/board.csv algorithm
     * Possible algorithms: astar or bfs
     * Possible boards: board1 till board7
 
-Example if you would like to run the 5th board with an astar algorithm
+    Example if you would like to run the 5th board with an astar algorithm
 
-```
-python rushhour.py Boards/board5.csv astar 
-```
+    ```
+    python rushhour.py Boards/board5.csv astar 
+    ```
+    
 ## Files ##
 
 File          | Description
