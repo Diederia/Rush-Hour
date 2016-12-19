@@ -12,9 +12,9 @@ This is a rush hour solver written in python. It is tested using seven different
     Example if you would like to run the 5th board with an astar algorithm
 
     ```
-    python rushhour.py Boards/board5.csv astar 
+    python rushhour.py Boards/board5.csv astar
     ```
-    
+
 ## Files ##
 
 File          | Description
