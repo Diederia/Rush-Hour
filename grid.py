@@ -4,6 +4,8 @@
 '''
 
 from vehicle import Vehicle
+from random import randint
+
 
 # Global moves and archive
 moves = []
@@ -153,6 +155,7 @@ class Grid(object):
     def is_vehicle_blocked(self, name, board, visted_vehicles):
         """Loops through vehicles """
 
+
         for vehicle in self.vehicles:
             if name == vehicle.name:
                 if vehicle.orientation == 'h':
@@ -164,25 +167,28 @@ class Grid(object):
                         return self.return_blocked(name, visted_vehicles, current_name)
                     if board[vehicle.y][vehicle.x - 1] != ' ' and board[vehicle.y][vehicle.x + vehicle.length] != ' ':
                         current_name = board[vehicle.y][vehicle.x + vehicle.length]
-                        if self.return_blocked(name, visted_vehicles, current_name) == None:
-                            current_name = board[vehicle.y][vehicle.x - 1]
+                        if self.return_blocked(name, visted_vehicles, current_name) != None:
                             return self.return_blocked(name, visted_vehicles, current_name)
-                        else:
+                        current_name = board[vehicle.y][vehicle.x - 1]
+                        if self.return_blocked(name, visted_vehicles, current_name) != None:
                             return self.return_blocked(name, visted_vehicles, current_name)
                 else:
                     if vehicle.y + vehicle.length == self.n and board[vehicle.y - 1][vehicle.x] != ' ':
                         current_name = board[vehicle.y - 1][vehicle.x]
+                        # print "1000"
                         return self.return_blocked(name, visted_vehicles, current_name)
                     if vehicle.y - 1 < 0 and board[vehicle.y + vehicle.length][vehicle.x] != ' ':
                         current_name = board[vehicle.y + vehicle.length][vehicle.x]
+                        # print "2000"
                         return self.return_blocked(name, visted_vehicles, current_name)
                     if board[vehicle.y - 1][vehicle.x] != ' ' and board[vehicle.y + vehicle.length][vehicle.x] != ' ':
                         current_name = board[vehicle.y + vehicle.length][vehicle.x]
-                        if self.return_blocked(name, visted_vehicles, current_name) == None:
-                            current_name = board[vehicle.y - 1][vehicle.x]
+                        if self.return_blocked(name, visted_vehicles, current_name) != None:
                             return self.return_blocked(name, visted_vehicles, current_name)
-                        else:
+                        current_name = board[vehicle.y - 1][vehicle.x]
+                        if self.return_blocked(name, visted_vehicles, current_name) != None:
                             return self.return_blocked(name, visted_vehicles, current_name)
+
                 return None
 
     def return_blocked(self, name, visted_vehicles, current_name):
