@@ -17,19 +17,22 @@ from beamsearch import *
 
 def main():
     # Error handling wrong command line from user
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 3 and len(sys.argv) != 4:
         print "Usage example: python rushhour.py Boards/board.csv algorithm"
+        # exit()
 
     # Initializing variables matching correct csv file and algorithm
     csv_file = sys.argv[1]
     algorithm = sys.argv[2]
+    if len(sys.argv) == 4:
+        heuristic = sys.argv[3]
 
     # Unload csv file
     start = load_file(csv_file)
 
     # Running program on the right algorithm and showing results
     if algorithm == 'astar':
-        came_from, goal, time = a_star_search(start)
+        came_from, goal, time = a_star_search(start, heuristic)
         display_results(start, came_from, goal, time)
     elif algorithm == 'bfs':
         came_from, goal, time = bfs(start)
@@ -73,7 +76,7 @@ def display_results(start, came_from, goal, time):
         print "No solution found!"
     else:
         solution = reconstruct_path(came_from, start, goal)
-        visualize(solution)
+        # visualize(solution)
         print 'Solution steps: {0}'.format(', '.join(solution_steps(solution)))
         print 'Time to find solution of the board: {0}'.format(time) + '.'
 

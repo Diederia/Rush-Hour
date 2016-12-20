@@ -6,13 +6,25 @@ This is a rush hour solver written in python. It is tested using seven different
 2. Install python 2.7
 3. Open project directory in terminal
 4. Running the code with command line in the terminal: python rushhour.py Boards/board.csv algorithm
-    * Possible algorithms: astar or bfs
     * Possible boards: board1 till board7
+    * Possible algorithms: astar or bfs
+        * Posibble heuristics for astar:
+            1: Blocking heuristic
+            2: From goal heuristic
+            3: Advanced heuristic
+            4: Blocking heuristic + from goal heuristic
+            5: Blocking heuristic + advanced heuristic
+            6: Advanced heuristic + from goal heuristic
+            7: Blocking heuristic + from goal heuristic + advanced heuristic
 
-    Example if you would like to run the 5th board with an astar algorithm
+    Example if you would like to run the 5th board with an astar algorithm with the blocking and the from goal heuristic:
 
     ```
-    python rushhour.py Boards/board5.csv astar
+    python rushhour.py Boards/board5.csv astar 4
+    ```
+    Example if you would like to run the 5th board with the bfs algorithm:
+    ```
+    python rushhour.py Boards/board5.csv bfs
     ```
 
 ## Files ##

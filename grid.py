@@ -154,8 +154,6 @@ class Grid(object):
 
     def is_vehicle_blocked(self, name, board, visted_vehicles):
         """Loops through vehicles """
-
-
         for vehicle in self.vehicles:
             if name == vehicle.name:
                 if vehicle.orientation == 'h':
@@ -175,11 +173,9 @@ class Grid(object):
                 else:
                     if vehicle.y + vehicle.length == self.n and board[vehicle.y - 1][vehicle.x] != ' ':
                         current_name = board[vehicle.y - 1][vehicle.x]
-                        # print "1000"
                         return self.return_blocked(name, visted_vehicles, current_name)
                     if vehicle.y - 1 < 0 and board[vehicle.y + vehicle.length][vehicle.x] != ' ':
                         current_name = board[vehicle.y + vehicle.length][vehicle.x]
-                        # print "2000"
                         return self.return_blocked(name, visted_vehicles, current_name)
                     if board[vehicle.y - 1][vehicle.x] != ' ' and board[vehicle.y + vehicle.length][vehicle.x] != ' ':
                         current_name = board[vehicle.y + vehicle.length][vehicle.x]

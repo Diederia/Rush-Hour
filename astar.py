@@ -24,7 +24,7 @@ class PriorityQueue:
     def get(self):
         return heapq.heappop(self.elements)[1]
 
-def a_star_search(start):
+def a_star_search(start, heuristic):
     """
     This function starts an A* alogrithm finding the optimal
     solution for the rush hour board given to it.
@@ -43,7 +43,7 @@ def a_star_search(start):
     came_from[start] = None
     cost[start] = 0
     start_time = clock.clock()
-    visted_nodes = 0
+    visited_nodes = 0
 
     # Get board configuration out of the queue till non is left
     while not queue.empty():
@@ -68,7 +68,7 @@ def a_star_search(start):
             if move not in cost or new_cost < cost[move]:
                 board = move.create_board(move.vehicles)
                 cost[move] = new_cost
-                priority = new_cost + from_goal(move, board) + advanced_heuristic(move, board)
+                priority = new_cost + get_heuristic(heuristic, move, board)
                 queue.put(move, priority)
                 came_from[move] = grid
 
@@ -76,7 +76,25 @@ def a_star_search(start):
     time = 0
     return solution, time
 
-def blocker_estimate(move, board):
+def get_heuristic(heuristic, move, board):
+    if heuristic == '1':
+        return blocker_heuristic(move, board)
+    elif heuristic == '2':
+        return goal_heuristic(move, board)
+    elif heuristic == '3':
+        return advanced_heuristic(move, board)
+    elif heuristic == '4':
+        return blocker_heuristic(move, board) + goal_heuristic(move, board)
+    elif heuristic == '5':
+        return blocker_heuristic(move, board) + advanced_heuristic(move, board)
+    elif heuristic == '6':
+        return goal_heuristic(move, board) + advanced_heuristic(move, board)
+    elif heuristic == '7':
+        return blocker_heuristic(move, board) + goal_heuristic(move, board) + advanced_heuristic(move, board)
+    else:
+        print "Error with getting heuristic"
+
+def blocker_heuristic(move, board):
     """ Checks how many vehicles are standing in front of the (red) target car
 
     move: Grid object of the current situation
@@ -91,12 +109,12 @@ def blocker_estimate(move, board):
         current_place = board[move.exit_y][move.n - (i + 1)]
         if current_place != 'x':
             if current_place != ' ':
-                score += 2
+                score += 3
         else:
             return score
 
 
-def from_goal(move, board):
+def goal_heuristic(move, board):
     """ Checks how many steps away the (red) target car is from the exit
 
     move: Grid object of the current situation
