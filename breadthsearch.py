@@ -20,7 +20,6 @@ def bfs(start):
     took the algorithm to find the solution. If there is no solution found,
     it will alert the user this board has no solution.
     """
-    solution = list()
     came_from = dict()
     queue = deque()
     queue.appendleft(start)
@@ -44,5 +43,5 @@ def bfs(start):
             came_from[move] = grid
             queue.extendleft([move])
 
-    end_time = 0
-    return solution, end_time
+    time = 0
+    return came_from, grid, time

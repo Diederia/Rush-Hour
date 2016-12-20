@@ -38,7 +38,7 @@ def main():
         came_from, goal, time = bfs(start)
         display_results(start, came_from, goal, time)
     elif algorithm == 'beamsearch':
-        came_from, goal, time = beamSearch(start)
+        came_from, goal, time = beamSearch(start, heuristic)
         display_results(start, came_from, goal, time)
     else:
         print 'Please enter astar or bfs'

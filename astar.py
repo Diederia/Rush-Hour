@@ -68,7 +68,7 @@ def a_star_search(start, heuristic):
             if move not in cost or new_cost < cost[move]:
                 board = move.create_board(move.vehicles)
                 cost[move] = new_cost
-                priority = new_cost + get_heuristic(heuristic, move, board)
+                priority = new_cost + heuristic_cost(heuristic, move, board)
                 queue.put(move, priority)
                 came_from[move] = grid
 
@@ -76,7 +76,7 @@ def a_star_search(start, heuristic):
     time = 0
     return solution, time
 
-def get_heuristic(heuristic, move, board):
+def heuristic_cost(heuristic, move, board):
     if heuristic == '1':
         return blocker_heuristic(move, board)
     elif heuristic == '2':
