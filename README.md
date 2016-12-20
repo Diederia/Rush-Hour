@@ -33,7 +33,6 @@ File          | Description
 ------------- | -------------
 Boards        | File with representations of board 1 till 7
 astar         | A* algorithm with differen heuristics
-beamsearch    | Beamsearch alogrithm
 breadthsearch | Breadth search first algorithm
 grid          | Class Grid representing a rushhour board
 vehicle       | The he main file in order to run the program
