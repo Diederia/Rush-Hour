@@ -109,7 +109,7 @@ def blocker_heuristic(move, board):
         current_place = board[move.exit_y][move.n - (i + 1)]
         if current_place != 'x':
             if current_place != ' ':
-                score += 3
+                score += 1
         else:
             return score
 

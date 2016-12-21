@@ -134,9 +134,6 @@ class Grid(object):
         if self.not_in_archive(new_vehicles):
             moves.append(Grid(new_vehicles, self.n))
 
-    def nodes_counter(self):
-        return
-
     def not_in_archive(self, new_vehicles):
         """Checks if the vehicle is not in archive."""
 
@@ -148,46 +145,78 @@ class Grid(object):
         if board in archive:
             return False
         else:
-            self.nodes_counter()
             archive.add(board)
             return True
 
     def is_vehicle_blocked(self, name, board, visted_vehicles):
-        """Loops through vehicles """
-        for vehicle in self.vehicles:
-            if name == vehicle.name:
-                if vehicle.orientation == 'h':
-                    if vehicle.x + vehicle.length == self.n and board[vehicle.y][vehicle.x - 1] != ' ':
-                        current_name = board[vehicle.y][vehicle.x - 1]
-                        return self.return_blocked(name, visted_vehicles, current_name)
-                    if vehicle.x - 1 < 0 and board[vehicle.y][vehicle.x + vehicle.length] != ' ':
-                        current_name = board[vehicle.y][vehicle.x + vehicle.length]
-                        return self.return_blocked(name, visted_vehicles, current_name)
-                    if board[vehicle.y][vehicle.x - 1] != ' ' and board[vehicle.y][vehicle.x + vehicle.length] != ' ':
-                        current_name = board[vehicle.y][vehicle.x + vehicle.length]
-                        if self.return_blocked(name, visted_vehicles, current_name) != None:
-                            return self.return_blocked(name, visted_vehicles, current_name)
-                        current_name = board[vehicle.y][vehicle.x - 1]
-                        if self.return_blocked(name, visted_vehicles, current_name) != None:
-                            return self.return_blocked(name, visted_vehicles, current_name)
-                else:
-                    if vehicle.y + vehicle.length == self.n and board[vehicle.y - 1][vehicle.x] != ' ':
-                        current_name = board[vehicle.y - 1][vehicle.x]
-                        return self.return_blocked(name, visted_vehicles, current_name)
-                    if vehicle.y - 1 < 0 and board[vehicle.y + vehicle.length][vehicle.x] != ' ':
-                        current_name = board[vehicle.y + vehicle.length][vehicle.x]
-                        return self.return_blocked(name, visted_vehicles, current_name)
-                    if board[vehicle.y - 1][vehicle.x] != ' ' and board[vehicle.y + vehicle.length][vehicle.x] != ' ':
-                        current_name = board[vehicle.y + vehicle.length][vehicle.x]
-                        if self.return_blocked(name, visted_vehicles, current_name) != None:
-                            return self.return_blocked(name, visted_vehicles, current_name)
-                        current_name = board[vehicle.y - 1][vehicle.x]
-                        if self.return_blocked(name, visted_vehicles, current_name) != None:
-                            return self.return_blocked(name, visted_vehicles, current_name)
+        """Checks if a vehicle is blocked. If so, the function return the
+        vehicle name of the blocking car, else it returns None.
 
+        Returns: the name of the blocking car and a list of visted vehicles.
+         """
+        # Iterates over all the vehicles on the board
+        for vehicle in self.vehicles:
+            # Get the right vehicle
+            if name == vehicle.name:
+                # Checks if the orientation of the vehicle is horizontal
+                if vehicle.orientation == 'h':
+                    # Check if vehicle is next to border and is blocked
+                    if vehicle.x + vehicle.length == self.n and board[vehicle.y][vehicle.x - 1] != ' ':
+                        # Get the name of the blocking car
+                        current_name = board[vehicle.y][vehicle.x - 1]
+                        # Return the name and the list of visted vehicles
+                        return self.return_blocked(name, visted_vehicles, current_name)
+                    # Check if vehicle is next to border and is blocked
+                    if vehicle.x - 1 < 0 and board[vehicle.y][vehicle.x + vehicle.length] != ' ':
+                        # Get the name of the blocking car
+                        current_name = board[vehicle.y][vehicle.x + vehicle.length]
+                        # Return the name and the list of visted vehicles
+                        return self.return_blocked(name, visted_vehicles, current_name)
+                    # Check if vehicle is blocked by two other vehicles
+                    if board[vehicle.y][vehicle.x - 1] != ' ' and board[vehicle.y][vehicle.x + vehicle.length] != ' ':
+                        # Get the name of the right blocking car
+                        current_name = board[vehicle.y][vehicle.x + vehicle.length]
+                        # Only return the if it's not in the visted list
+                        if self.return_blocked(name, visted_vehicles, current_name) != None:
+                            return self.return_blocked(name, visted_vehicles, current_name)
+                        # Get the name of the left blocking car
+                        current_name = board[vehicle.y][vehicle.x - 1]
+                        # Return the name and the list of visted vehicles
+                        return self.return_blocked(name, visted_vehicles, current_name)
+                else:
+                    # Check if vehicle is next to border and is blocked
+                    if vehicle.y + vehicle.length == self.n and board[vehicle.y - 1][vehicle.x] != ' ':
+                        # Get the name of the blocking car
+                        current_name = board[vehicle.y - 1][vehicle.x]
+                        # Return the name and the list of visted vehicles
+                        return self.return_blocked(name, visted_vehicles, current_name)
+                    # Check if vehicle is next to border and is blocked
+                    if vehicle.y - 1 < 0 and board[vehicle.y + vehicle.length][vehicle.x] != ' ':
+                        # Get the name of the blocking car
+                        current_name = board[vehicle.y + vehicle.length][vehicle.x]
+                        return self.return_blocked(name, visted_vehicles, current_name)
+                    # Check if vehicle is blocked by two other vehicles
+                    if board[vehicle.y - 1][vehicle.x] != ' ' and board[vehicle.y + vehicle.length][vehicle.x] != ' ':
+                        # Get the name of the down blocking car
+                        current_name = board[vehicle.y + vehicle.length][vehicle.x]
+                        # Only return the if it's not in the visted list
+                        if self.return_blocked(name, visted_vehicles, current_name) != None:
+                            return self.return_blocked(name, visted_vehicles, current_name)
+                        # Get the name of the up blocking car
+                        current_name = board[vehicle.y - 1][vehicle.x]
+                        # Return the name and the list of visted vehicles
+                        return self.return_blocked(name, visted_vehicles, current_name)
+
+                # Vehicle is not blocked
                 return None
 
     def return_blocked(self, name, visted_vehicles, current_name):
+        """Checks if a vehicle is allready visted. if not the function returns
+        the name and the visted list, else it returns None.
+
+        Returns: Name of the current vehicle and the list of visted vehicles.
+         """
+
         visted_vehicles.add(name)
         if current_name not in visted_vehicles:
             return current_name, visted_vehicles
