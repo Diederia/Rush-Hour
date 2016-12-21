@@ -13,7 +13,6 @@ from vehicle import *
 from breadthsearch import *
 from grid import *
 from astar import *
-from beamsearch import *
 
 def main():
     # Error handling wrong command line from user

@@ -216,7 +216,6 @@ class Grid(object):
 
         Returns: Name of the current vehicle and the list of visted vehicles.
          """
-
         visted_vehicles.add(name)
         if current_name not in visted_vehicles:
             return current_name, visted_vehicles
