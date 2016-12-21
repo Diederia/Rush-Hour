@@ -5,10 +5,10 @@
 
 import cProfile
 import sys
-from sys import platform
 import csv
 import os
 import time
+from sys import platform
 from vehicle import *
 from breadthsearch import *
 from grid import *
@@ -94,7 +94,7 @@ def reconstruct_path(came_from, start, goal):
 
     # Append configuartion to board as a step until the begin situation is reached
     while current != start:
-        current = came_from[current]
+        current = came_from[current][0]
         path.append(current)
     path.append(start)
     path.reverse()

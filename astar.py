@@ -38,10 +38,7 @@ def a_star_search(start, heuristic):
     queue = PriorityQueue()
     queue.put(start, 0)
     came_from = dict()
-    cost = dict()
-    path = list()
-    came_from[start] = None
-    cost[start] = 0
+    came_from[start] = None,0
     start_time = clock.clock()
     visited_nodes = 0
 
@@ -59,22 +56,20 @@ def a_star_search(start, heuristic):
             return came_from, grid, time
 
         # Get every move possible from a certain board configuration
-        board_moves = grid.create_board(grid.vehicles)
-        for move in grid.get_moves(board_moves):
+        for move in grid.get_moves():
             # Every step has a cost of 1
-            new_cost = cost[grid] + 1
+            new_cost = came_from[grid][1] + 1
 
             # Calculate the costs (priority score) of a move through heuristics.
-            if move not in cost or new_cost < cost[move]:
+            if move not in came_from or new_cost < came_from[move][1]:
                 board = move.create_board(move.vehicles)
-                cost[move] = new_cost
                 priority = new_cost + heuristic_cost(heuristic, move, board)
                 queue.put(move, priority)
-                came_from[move] = grid
+                came_from[move] = grid, new_cost
 
 
     time = 0
-    return solution, time
+    return came_from, grid, time
 
 def heuristic_cost(heuristic, move, board):
     if heuristic == '1':

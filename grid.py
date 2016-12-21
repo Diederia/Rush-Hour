@@ -4,8 +4,6 @@
 '''
 
 from vehicle import Vehicle
-from random import randint
-
 
 # Global moves and archive
 moves = []
@@ -91,13 +89,14 @@ class Grid(object):
                 else:
                     return False
 
-    def get_moves(self, board):
+    def get_moves(self):
         """Checks and returns all the possible moves from a current Grid object.
 
         Returns: a list of moves.
         """
         # Clear the move list
         moves[:] = []
+        board = self.create_board(self.vehicles)
 
         # Iterates over all the vehicles on the board
         for vehicle in self.vehicles:

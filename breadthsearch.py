@@ -25,6 +25,7 @@ def bfs(start):
     queue.appendleft(start)
     start_time = clock.clock()
     visited_nodes = 0
+    cost = 0
 
     # Dequeue element from queue if there are elements left
     while len(queue) != 0:
@@ -37,10 +38,10 @@ def bfs(start):
             end_time = clock.clock()
             time = end_time - start_time
             return came_from, grid, time
+
         # If board is not solved, get every possible move from current board
-        board = grid.create_board(grid.vehicles)
-        for move in grid.get_moves(board):
-            came_from[move] = grid
+        for move in grid.get_moves():
+            came_from[move] = grid, cost
             queue.extendleft([move])
 
     time = 0
