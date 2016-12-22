@@ -1,6 +1,7 @@
 '''
-    File description:
-
+    File description: This file contains the implementation of an breadth first
+    search algorithm, based on the Rush Hour puzzle. The goal of this algorithm
+    is to find the shortest path to the solution possible.
 '''
 
 import grid
@@ -8,13 +9,10 @@ import time as clock
 from collections import deque
 
 def bfs(start):
-    """
-    This function starts an breadth first search algorithm finding the optimal
+    """This function starts an breadth first search algorithm finding the optimal
     solution for the rush hour board given to it.
 
-    start: the initial rush hour board
-    max_depth: an integer representing the maximum amount of moves can be made
-    before the solution is found. If you fill in nothing this will be 1000.
+    start: the initial rush hour board.
 
     Returns: a list representing the solution and the end time in seconds it
     took the algorithm to find the solution. If there is no solution found,
@@ -34,10 +32,9 @@ def bfs(start):
 
         if grid.solved():
             # If sovled calculate time to solve the game
-            print visited_nodes
             end_time = clock.clock()
             time = end_time - start_time
-            return came_from, grid, time
+            return came_from, grid, time, visited_nodes
 
         # If board is not solved, get every possible move from current board
         for move in grid.get_moves():
@@ -45,4 +42,4 @@ def bfs(start):
             queue.extendleft([move])
 
     time = 0
-    return came_from, grid, time
+    return came_from, grid, time, visited_nodes

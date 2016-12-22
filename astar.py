@@ -25,11 +25,11 @@ class PriorityQueue:
         return heapq.heappop(self.elements)[1]
 
 def a_star_search(start, heuristic):
-    """
-    This function starts an A* alogrithm finding the optimal
+    """This function starts an A* alogrithm finding the optimal
     solution for the rush hour board given to it.
 
-    start: the initial rush hour board
+    start: the initial rush hour board.
+    heuristic: the selected heuristic by the user.
 
     Returns: a list representing the path to the solution and the end time
     in seconds it took the algorithm to find the solution.
@@ -50,28 +50,34 @@ def a_star_search(start, heuristic):
         # Checks if the board is solved
         if grid.solved():
             # If sovled calculate time to solve the game
-            print visited_nodes
             end_time = clock.clock()
             time = end_time - start_time
-            return came_from, grid, time
+            return came_from, grid, time, visited_nodes
 
         # Get every move possible from a certain board configuration
         for move in grid.get_moves():
             # Every step has a cost of 1
             new_cost = came_from[grid][1] + 1
-
             # Calculate the costs (priority score) of a move through heuristics.
             if move not in came_from or new_cost < came_from[move][1]:
                 board = move.create_board(move.vehicles)
                 priority = new_cost + heuristic_cost(heuristic, move, board)
                 queue.put(move, priority)
                 came_from[move] = grid, new_cost
-
-
     time = 0
-    return came_from, grid, time
+    return came_from, grid, time, visited_nodes
 
 def heuristic_cost(heuristic, move, board):
+    """ Gives the right heuristic to use for the calculation of the heuristic
+    cost.
+
+    heuristic: the selected heuristic by the user.
+    move: Grid object of the current situation
+    board: multiple arrays in an array representing the board filled with
+    vehicles.
+
+    Returns: the score of the selected heuristic(s)
+    """
     if heuristic == '1':
         return blocker_heuristic(move, board)
     elif heuristic == '2':
@@ -92,51 +98,49 @@ def heuristic_cost(heuristic, move, board):
 def blocker_heuristic(move, board):
     """ Checks how many vehicles are standing in front of the (red) target car
 
-    move: Grid object of the current situation
+    move: Grid object of the current situation.
+    board: multiple arrays in an array representing the board filled with
+    vehicles.
 
     Returns: an integer that represents the amount of vehicles blocking the
-    (red) target car
+    (red) target car.
     """
     score = 0
-
     # Checks right to left at hight of exit y how many vehicles are blocking
     for i in range(move.n):
         current_place = board[move.exit_y][move.n - (i + 1)]
         if current_place != 'x':
             if current_place != ' ':
-                score += 1
-        else:
-            return score
+                score += 2
+        return score
 
 
 def goal_heuristic(move, board):
     """ Checks how many steps away the (red) target car is from the exit
 
-    move: Grid object of the current situation
+    move: Grid object of the current situation.
 
-    Returns: an integer that represents the amount of moves the (red)
-    target car needs to make before it is at the exit position
+    Returns: an integer that represents the amount of moves the (red) target
+    car needs to make before it is at the exit position.
     """
     score = 0
-
     # Checks right to left at hight of exit y how far target car is from exit
     for i in range(move.n):
         current_place = board[move.exit_y][move.n - (i + 1)]
         if current_place == 'x':
             return score
-        else:
-            score += 1
+        score += 1
 
 def advanced_heuristic(move, board):
     """Checks if there is a vehcile standing in front of the (red) target car.
     If so, checks if the vehicle is blocked again and goes on until it finds
     a moveable vehicle.
 
-    move: Grid object of the current situation
+    move: Grid object of the current situation.
 
-    Returns: an integer
+    Returns: an integer that represents the amount of blocking cars.
     """
-    visted_vehicles = set()
+    visited_vehicles = set()
     score = 0
     # Checks right to left at hight of exit y if there is a vehicles is blocking
     for i in range(move.n):
@@ -144,8 +148,8 @@ def advanced_heuristic(move, board):
         if current_place != ' ' and current_place != 'x':
             name = current_place
             # Go on until a moveable vehicle
-            while move.is_vehicle_blocked(name, board, visted_vehicles) != None:
+            while move.is_vehicle_blocked(name, board, visited_vehicles) != None:
                 score+= 1
 
-                name, visted_vehicles = move.is_vehicle_blocked(name, board, visted_vehicles)
+                name, visited_vehicles = move.is_vehicle_blocked(name, board, visited_vehicles)
     return score

@@ -8,7 +8,6 @@ import sys
 import csv
 import os
 import time
-from sys import platform
 from vehicle import *
 from breadthsearch import *
 from grid import *
@@ -31,14 +30,11 @@ def main():
 
     # Running program on the right algorithm and showing results
     if algorithm == 'astar':
-        came_from, goal, time = a_star_search(start, heuristic)
-        display_results(start, came_from, goal, time)
+        came_from, goal, time, visited_nodes = a_star_search(start, heuristic)
+        display_results(start, came_from, goal, time, visited_nodes)
     elif algorithm == 'bfs':
-        came_from, goal, time = bfs(start)
-        display_results(start, came_from, goal, time)
-    elif algorithm == 'beamsearch':
-        came_from, goal, time = beamSearch(start, heuristic)
-        display_results(start, came_from, goal, time)
+        came_from, goal, time, visited_nodes = bfs(start)
+        display_results(start, came_from, goal, time, visited_nodes)
     else:
         print 'Please enter astar or bfs'
 
@@ -70,22 +66,31 @@ def load_file(csv_file):
                 n = int(row[0])
     return Grid(set(vehicles), n)
 
-def display_results(start, came_from, goal, time):
+def display_results(start, came_from, goal, time, visited_nodes):
+    """Visualizing the solution steps and prints the solution steps, time and
+    the visited nodes.
+
+    start: the initial rush hour board.
+    came_from: a dictionary with the child as key and parent as value.
+    goal: the board where the red car stands next to the exit.
+    time: the time to find the solution.
+    visited_nodes: the amount of visited nodes.
+    """
     if time == 0:
         print "No solution found!"
-    else:
-        solution = reconstruct_path(came_from, start, goal)
-        # visualize(solution)
-        print 'Solution steps: {0}'.format(', '.join(solution_steps(solution)))
-        print 'Time to find solution of the board: {0}'.format(time) + '.'
+    solution = reconstruct_path(came_from, start, goal)
+    visualize(solution)
+    print 'Solution steps: {0}'.format(', '.join(solution_steps(solution))) + '.'
+    print 'Time to find solution of the board: {0}'.format(time) + '.'
+    print 'Visited nodes: {0}'.format(visited_nodes) + '.'
 
 def reconstruct_path(came_from, start, goal):
-    """Starting from the goal situation, it finds it parent till the start situation is
-    reached.
+    """Starting from the goal situation, it finds it parent till the start
+    situation is reached.
 
-    came_from: a dictionary with the move as key and grid as value.
-    start: begin configuration of the board
-    goal: situation where the red car stands next to the exit
+    came_from: a dictionary with the child as key and parent as value.
+    start: the initial rush hour board.
+    goal: the board where the red car stands next to the exit.
 
     Returns: The steps it took from the start situation to the goal situation.
     """
@@ -104,9 +109,9 @@ def visualize(solution):
     """Simulation of the different steps on the board that lead to
     the solution from a breadth search algorithm.
 
-    solution: a list of Grid objects leading to the solution
+    solution: a list of Grid objects leading to the solution.
 
-    Returns: prints one Grid object in solution at a time
+    Returns: prints one Grid object in solution at a time.
     """
     # Check operating system and give the right clear command
     if os.name == 'nt':
@@ -124,18 +129,16 @@ def visualize(solution):
 
     # prints the final grid
     print solution[0][i + 1]
-    return 'Rush hour board is Completed! The solution steps are displayed below:'
+    return
 
 def solution_steps(solution):
-    """
-    Generate list of steps to the solution.
+    """Generate list of steps to the solution.
 
-    solution: a list of Grid objects leading to the solution
+    solution: a list of Grid objects leading to the solution.
 
     Returns: a list of the descriptions of the steps that lead to the solution.
     """
     steps = []
-
     # Loops through the list of Grid objects
     for i in range(len(solution[0]) - 1):
         # Calculating the difference between the vehicles in two Grid objects
