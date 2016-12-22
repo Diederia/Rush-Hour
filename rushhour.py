@@ -120,6 +120,7 @@ def visualize(solution):
     else:
         clear = 'clear'
 
+    os.system(clear)
     # Loops through the list of Grid objects
     for i in range (len(solution[0]) - 1):
         # prints the solution, waits and than clears the displayed solution
