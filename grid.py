@@ -134,6 +134,9 @@ class Grid(object):
     def not_in_archive(self, new_vehicles):
         """Checks if the vehicle is not in archive.
 
+        NOG IETS OVER WAAROM WE HIER HET ARCHIEF CHECKEN!!
+        !!!
+
         new_vehicles: the set of vehicles after the move.
 
         Returns: a boolian, true if the board is not in archive and false
