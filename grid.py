@@ -133,9 +133,12 @@ class Grid(object):
 
     def not_in_archive(self, new_vehicles):
         """Checks if the vehicle is not in archive.
-
-        NOG IETS OVER WAAROM WE HIER HET ARCHIEF CHECKEN!!
-        !!!
+        A normal convention is to check in the algorithm itself if an element
+        not already exists in the archive.
+        The advantage to check it in the Grid object,
+        so before putting elements in the queue is to avoid visiting nodes
+        that already exist in the archive. Which eventually results in less
+        calculations.
 
         new_vehicles: the set of vehicles after the move.
 

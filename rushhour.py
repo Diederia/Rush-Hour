@@ -107,7 +107,8 @@ def reconstruct_path(came_from, start, goal):
 
 def visualize(solution):
     """Simulation of the different steps on the board that lead to
-    the solution from a breadth search algorithm.
+    the solution from a breadth search algorithm. On OS X the visialization is
+    working smooth, on windows it lags a bit.
 
     solution: a list of Grid objects leading to the solution.
 
@@ -119,12 +120,11 @@ def visualize(solution):
     else:
         clear = 'clear'
 
-    os.system(clear)
     # Loops through the list of Grid objects
     for i in range (len(solution[0]) - 1):
         # prints the solution, waits and than clears the displayed solution
         print (solution[0][i])
-        time.sleep(.1)
+        time.sleep(.2)
         os.system(clear)
 
     # prints the final grid
