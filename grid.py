@@ -98,21 +98,25 @@ class Grid(object):
             # Checks if the orientation of the vehicle is horizontal
             if vehicle.orientation == 'h':
                 # Can the vehicle move to the LEFT
-                if vehicle.x - 1 >= 0 and board[vehicle.y][vehicle.x - 1] == ' ':
+                if (vehicle.x - 1 >= 0 and
+                board[vehicle.y][vehicle.x - 1] == ' '):
                     new_vehicle = Vehicle(vehicle.name, vehicle.x - 1, vehicle.y, vehicle.orientation, vehicle.length)
                     self.add_move(vehicle, new_vehicle)
                 # Can the vehicle move to the RIGHT
-                if vehicle.x + vehicle.length < self.n and board[vehicle.y][vehicle.x + vehicle.length] == ' ':
+                if (vehicle.x + vehicle.length < self.n and
+                board[vehicle.y][vehicle.x + vehicle.length] == ' '):
                     new_vehicle = Vehicle(vehicle.name, vehicle.x + 1, vehicle.y, vehicle.orientation, vehicle.length)
                     self.add_move(vehicle, new_vehicle)
             # Checks if the orientation of the vehicle is vertical
             else:
                 # Can the vehicle move to the UP
-                if vehicle.y - 1 >= 0 and board[vehicle.y - 1][vehicle.x] == ' ':
+                if (vehicle.y - 1 >= 0 and
+                board[vehicle.y - 1][vehicle.x] == ' '):
                     new_vehicle = Vehicle(vehicle.name, vehicle.x, vehicle.y - 1, vehicle.orientation, vehicle.length)
                     self.add_move(vehicle, new_vehicle)
                 # Can the vehicle move to the DOWN
-                if vehicle.y + vehicle.length < self.n and board[vehicle.y + vehicle.length][vehicle.x] == ' ':
+                if (vehicle.y + vehicle.length < self.n and
+                board[vehicle.y + vehicle.length][vehicle.x] == ' '):
                     new_vehicle = Vehicle(vehicle.name, vehicle.x, vehicle.y + 1, vehicle.orientation, vehicle.length)
                     self.add_move(vehicle, new_vehicle)
         return moves
@@ -175,19 +179,22 @@ class Grid(object):
                 # Checks if the orientation of the vehicle is horizontal
                 if vehicle.orientation == 'h':
                     # Check if vehicle is next to border and is blocked
-                    if vehicle.x + vehicle.length == self.n and board[vehicle.y][vehicle.x - 1] != ' ':
+                    if (vehicle.x + vehicle.length == self.n and
+                    board[vehicle.y][vehicle.x - 1] != ' '):
                         # Get the name of the blocking car
                         current_name = board[vehicle.y][vehicle.x - 1]
                         # Return the name and the list of visited vehicles
                         return self.return_blocked(name, visited_vehicles, current_name)
                     # Check if vehicle is next to border and is blocked
-                    if vehicle.x - 1 < 0 and board[vehicle.y][vehicle.x + vehicle.length] != ' ':
+                    if (vehicle.x - 1 < 0 and
+                    board[vehicle.y][vehicle.x + vehicle.length] != ' '):
                         # Get the name of the blocking car
                         current_name = board[vehicle.y][vehicle.x + vehicle.length]
                         # Return the name and the list of visited vehicles
                         return self.return_blocked(name, visited_vehicles, current_name)
                     # Check if vehicle is blocked by two other vehicles
-                    if board[vehicle.y][vehicle.x - 1] != ' ' and board[vehicle.y][vehicle.x + vehicle.length] != ' ':
+                    if (board[vehicle.y][vehicle.x - 1] != ' ' and
+                    board[vehicle.y][vehicle.x + vehicle.length] != ' '):
                         # Get the name of the right blocking car
                         current_name = board[vehicle.y][vehicle.x + vehicle.length]
                         # Only return the if it's not in the visited list
@@ -199,18 +206,21 @@ class Grid(object):
                         return self.return_blocked(name, visited_vehicles, current_name)
                 else:
                     # Check if vehicle is next to border and is blocked
-                    if vehicle.y + vehicle.length == self.n and board[vehicle.y - 1][vehicle.x] != ' ':
+                    if (vehicle.y + vehicle.length == self.n and
+                    board[vehicle.y - 1][vehicle.x] != ' '):
                         # Get the name of the blocking car
                         current_name = board[vehicle.y - 1][vehicle.x]
                         # Return the name and the list of visited vehicles
                         return self.return_blocked(name, visited_vehicles, current_name)
                     # Check if vehicle is next to border and is blocked
-                    if vehicle.y - 1 < 0 and board[vehicle.y + vehicle.length][vehicle.x] != ' ':
+                    if (vehicle.y - 1 < 0 and
+                    board[vehicle.y + vehicle.length][vehicle.x] != ' '):
                         # Get the name of the blocking car
                         current_name = board[vehicle.y + vehicle.length][vehicle.x]
                         return self.return_blocked(name, visited_vehicles, current_name)
                     # Check if vehicle is blocked by two other vehicles
-                    if board[vehicle.y - 1][vehicle.x] != ' ' and board[vehicle.y + vehicle.length][vehicle.x] != ' ':
+                    if (board[vehicle.y - 1][vehicle.x] != ' ' and
+                    board[vehicle.y + vehicle.length][vehicle.x] != ' '):
                         # Get the name of the down blocking car
                         current_name = board[vehicle.y + vehicle.length][vehicle.x]
                         # Only return the if it's not in the visited list

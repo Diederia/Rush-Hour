@@ -12,6 +12,10 @@ import heapq
 import time as clock
 
 class PriorityQueue:
+    """ There is a standardized PriortyQueue in package Queue, but a own
+    implementation was used because we needed another implementation of
+    PriorityQueue.put for our algorithm to work correctly.
+    """
     def __init__(self):
         self.elements = []
 
@@ -33,7 +37,7 @@ def a_star_search(start, heuristic):
 
     Returns: a list representing the path to the solution and the end time
     in seconds it took the algorithm to find the solution.
-    If there is no solution found, it will alert the user this board has no solution.
+    If there is no solution found, it will alert the user it has no solution.
     """
     queue = PriorityQueue()
     queue.put(start, 0)
@@ -58,7 +62,7 @@ def a_star_search(start, heuristic):
         for move in grid.get_moves():
             # Every step has a cost of 1
             new_cost = came_from[grid][1] + 1
-            # Calculate the costs (priority score) of a move through heuristics.
+            # Calculate the costs (priority score) of a move through heuristics
             if move not in came_from or new_cost < came_from[move][1]:
                 board = move.create_board(move.vehicles)
                 priority = new_cost + heuristic_cost(heuristic, move, board)
@@ -116,7 +120,7 @@ def blocker_heuristic(move, board):
 
 
 def goal_heuristic(move, board):
-    """ Checks how many steps away the (red) target car is from the exit
+    """Checks how many steps away the (red) target car is from the exit
 
     move: Grid object of the current situation.
 
